@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "ViewMemberProfile";
+}
+
+<script type="text/javascript">
+    function ViewMemberProfile(formName) {
+        debugger;
+        $.ajax({
+            url: "ViewMemberProfile",
+            type: "POST",
+            data: $("#" + formName).serialize(),
+            complete: function (result) {
+                $("#ViewProfileContainer").html(result.responseText);
+            }
+        });
+        return false
+    }
+</script>
+
+<div id="SearchContainer">
+    <form name="ViewMemberSelection" id="ViewMemberSelection">
+      Select from corp roster:  <select name="pilotName" id="PilotName" onchange="ViewMemberProfile('ViewMemberSelection');">
+            @foreach (string pilot in ViewBag.PilotNames)
+            {
+                <option value="@pilot">@pilot</option>
+            }
+        </select>
+    </form>
+    <form name="ViewMemberSearch" id="ViewMemberSearch">
+        Search for pilot: <input type="text" name="pilotName" id="pilotName" /> <button onclick="ViewMemberProfile('ViewMemberSearch'); return false; ">Search</button>
+    </form>
+    
+</div>
+
+<div id="ViewProfileContainer">
+
+</div>

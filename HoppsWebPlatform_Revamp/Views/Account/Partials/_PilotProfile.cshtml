@@ -1,0 +1,25 @@
+﻿@model HoppsWebPlatform_Revamp.Models.PilotProfileViewModel
+
+@{
+    ViewBag.Title = Model.PilotName + "'s Profile"  ;
+}
+
+<script src="../../Scripts/Account/Account.js" type="text/javascript"></script>
+
+<h2>@Model.PilotName</h2>
+<img src="@string.Format("https://image.eveonline.com/Character/{0}_200.jpg", Model.PilotID)" width="100px" alt="@string.Format("{0}'s Character Image",@Model.PilotName)" />
+
+@if (User.Identity.Name.ToUpper() == Model.PilotName.ToUpper())
+{
+    @Html.ActionLink("Manage Account", "Manage", "Account");
+}
+<div id='validation-summary-cont'></div>
+
+@Html.Action("GetAPITable", "Account", new { pilotName = Model.PilotName } )
+@*@Html.Action("GetAddAPIForm", "Account", new { pilotName = Model.PilotName } )*@
+
+
+@*@if (Model.PilotName == User.Identity.Name)
+{
+    @Html.Partial("Partials/_AddAPI", new HoppsWebPlatform_Revamp.Models.ApiKey())
+}*@

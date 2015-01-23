@@ -1,0 +1,43 @@
+﻿@model IEnumerable<HoppsWebPlatform_Revamp.Models.Log>
+@{
+    Layout = null;
+}
+<fieldset>
+    <legend>Logs</legend>
+    <table>
+        <tr>
+            <th>Level</th>
+            <th>TimeStamp</th>
+            <th>User</th>
+            <th>IP Address</th>
+            <th>Message</th>
+            <th>CallSiteClass</th>
+            <th>StackTrace</th>
+        </tr>
+        @foreach (HoppsWebPlatform_Revamp.Models.Log log in Model)
+        {
+            string colorHex = "";
+            switch (log.Level)
+            {
+                case "Info" :
+                    colorHex = "#FFFFFF";
+                    break;
+                case "Error" :
+                    colorHex = "#F5B6A9";
+                    break;
+                case "Warn" :
+                    colorHex = "#E8D49E";
+                    break;
+            }
+            <tr style="background-color: @colorHex">
+                <td>@log.Level</td>
+                <td>@log.TimeStamp</td>
+                <td>@log.User</td>
+                <td>@log.IPAddress</td>
+                <td>@log.Message</td>
+                <td>@log.CallSiteClass</td>
+                <td>@log.StackTrace</td>
+            </tr>
+        }
+    </table>
+</fieldset>

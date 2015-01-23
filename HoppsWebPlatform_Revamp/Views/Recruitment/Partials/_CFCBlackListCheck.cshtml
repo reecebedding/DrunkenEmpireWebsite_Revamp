@@ -1,0 +1,11 @@
+﻿@model Dictionary<string, bool>
+
+<div class='BackgroundFieldBlock' id='CFCBlackListCont'>
+
+    <p id="header">Blacklist Check</p>
+
+    @foreach (KeyValuePair<string, bool> pilot in Model)
+    {
+        <p>@pilot.Key : @if (pilot.Value) { <text>BlackListed</text> }else{ <text>Clear</text>}</p>
+    }
+</div>

@@ -1,0 +1,11 @@
+﻿@model Dictionary<string, bool>
+@{
+    ViewBag.Title = "Refresh";
+}
+
+<h2>Full System Refresh Was Complete</h2>
+<ul>
+    <li>
+        Corp Roster Update: <b>@{if (Model["CorpMembers"]){ <text>OK</text> }else{ <text>Failed</text> }}</b>
+    </li>
+</ul>

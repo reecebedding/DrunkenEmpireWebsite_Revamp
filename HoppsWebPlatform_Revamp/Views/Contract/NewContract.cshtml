@@ -1,0 +1,37 @@
+﻿@model IEnumerable<HoppsWebPlatform_Revamp.Models.ContractContent>
+
+@{
+    ViewBag.Title = "New Contract";
+}
+
+<h2>NewContract</h2>
+
+<button onclick="AddNewItem()">Add item to contract</button>
+@Html.ValidationSummary()
+@using (Html.BeginForm("NewContract", "Contract", FormMethod.Post))
+{
+    <ol id="ItemList">
+        @if (Model != null)
+        {
+            int itemCount = 0;
+            IEnumerable<HoppsWebPlatform_Revamp.Models.ContractContent> dropDownItems = (IEnumerable<HoppsWebPlatform_Revamp.Models.ContractContent>)ViewBag.ContractItemTypes;
+            
+            foreach (HoppsWebPlatform_Revamp.Models.ContractContent content in Model)
+	        {
+		        <li>@Html.DropDownList("ContractItem[" + itemCount + "].itemID", new SelectList(dropDownItems, "itemID", "itemName", content.ItemName))
+                    @Html.TextBox("ContractItem[" + itemCount + "].Quantity", content.Quantity)
+		        </li>
+                
+                itemCount++;
+	        }
+        }
+        
+    </ol>
+    <input type="submit" value="Submit" />
+    <a href="@Url.Action("Index", "Contract")"><button type="button">Cancel</button></a>
+}
+
+
+
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+<script src="~/Scripts/Contract/Contract.js"></script>

@@ -1,0 +1,23 @@
+﻿@if (Request.IsAuthenticated) {
+
+    <ul class="nav navbar-nav navbar-right nav-login">
+        <li>
+            @*<img src="https://image.eveonline.com/Character/@Session["pilotID"]_50.jpg" />*@
+                 @Html.ActionLink(User.Identity.Name, "MyProfile", "Account", routeValues: null, htmlAttributes: new { @class = "username", title = "Manage" })
+        </li>
+        <li>
+           @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+            {
+                @Html.AntiForgeryToken()                
+            }
+            <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+        </li>
+    </ul>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right nav-login">
+        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}

@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Application";
+}
+
+<h2>Recruitment</h2>
+
+@if (Html.IsUserInAnyRole(User.Identity.Name, "Director, RecruiterSenior"))
+{
+    <p>
+        Remember To Send A Mail To The Mailing List With This Link:<b> @ViewBag.ApplicationURL</b> <br />
+        You can view the application @Html.ActionLink("Here", "ViewApplication", new { id = ViewBag.AppID })
+    </p>
+    <script type="text/javascript">
+        CCPEVE.sendMail(@ViewBag.PilotID, '@ViewBag.ApplicantName - P1', '<a href="@ViewBag.URL">@ViewBag.URL</a> <br /><br />NOTE: If you sent this to yourself, your doing it wrong so please re-send this mail to Drunken Recruitment mailing list.');
+    </script>
+}
+else
+{
+    <h2>Thank you @User.Identity.Name for applying to The Drunken Empire, check back for an update on your application.</h2>
+
+    <h3>Please join our Public In-Game channel <button onclick="CCPEVE.joinChannel('HOPPS BREWERY');">HOPPS BREWERY</button> to get in contact with our recruiters and directors. </h3>
+}
+<footer>Note: It can take up to several days for your application to be processed</footer>

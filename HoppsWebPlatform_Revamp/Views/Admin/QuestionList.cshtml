@@ -1,0 +1,21 @@
+﻿@model IEnumerable<HoppsWebPlatform_Revamp.Models.RecruitmentApplicationQuestion>
+@{
+    Layout = null;
+}
+    <table style="float: left;">
+    <tr>
+        <th>Question</th>
+        <th>Data Type</th>
+        <th>Active</th>
+        <th></th>
+    </tr>
+        @foreach (HoppsWebPlatform_Revamp.Models.RecruitmentApplicationQuestion question in Model)
+        {
+            <tr>
+                <td>@question.Description</td>
+                <td>@question.DataType</td>
+                <td>@question.Active</td>
+                <td><button value="@question.ID" onclick="LoadEditQuestionData(@question.ID);">Edit</button></td>
+            </tr>        
+        }
+</table>

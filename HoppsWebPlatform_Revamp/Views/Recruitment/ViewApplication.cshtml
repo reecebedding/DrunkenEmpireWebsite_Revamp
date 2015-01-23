@@ -1,0 +1,46 @@
+﻿@model HoppsWebPlatform_Revamp.Models.RecruitmentApplication
+
+@{
+    ViewBag.Title = Model.ApplicantName + " - Application";
+}
+
+<h2>Recruit Application For @Model.ApplicantName</h2>
+
+<fieldset id="application-details">
+<legend>Details</legend>
+    <div>
+        <div class="question-description">Status</div>
+        <div>@Model.Status</div>
+        <hr />
+    </div>
+    <div>
+        <div class="question-description">P1 Recruiter</div>
+        <div>@Model.P1Recruiter</div>
+        <hr />
+    </div>
+    <div>
+        <div class="question-description">P2 Recruiter</div>
+        <div>@Model.P2Recruiter</div>
+        <hr />
+    </div>
+    <div>
+        <div class="question-description">Elapsed Time</div>
+        <div>@if (Model.Active){@((DateTime.Now - Model.P1Timestamp).Days)}else{@((Model.CompletionTimeStamp - Model.P1Timestamp).Days)} Days</div>
+        <hr />
+    </div>
+</fieldset>
+
+<fieldset id="application-actions">
+<legend>Actions</legend>
+    <div>
+            @Html.ActionLink("Background Check", "BackgroundCheck", new { appID = Model.ID }, new { @class = "ApplicationActionLink" })  <hr />
+            @if (User.IsInRole("Director"))
+            {
+                @Html.ActionLink("Accept Application", "CompleteApplication", new { appID = Model.ID, result = "Accepted" })
+                @Html.ActionLink("Decline Application", "CompleteApplication", new { appID = Model.ID, result = "Declined" }) <hr />    
+            }
+            
+    </div>
+</fieldset>
+
+@{Html.RenderAction("GetApplicationView", Model);}

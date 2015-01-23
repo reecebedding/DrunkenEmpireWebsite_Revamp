@@ -1,0 +1,53 @@
+﻿@model HoppsWebPlatform_Revamp.Models.Contract
+@{
+    ViewBag.Title = "New Contract";
+}
+
+<h2>Confirm Contract</h2>
+
+<table>
+    <tr>
+        <th>Item Name</th>
+        <th>Quantity</th>
+        <th>Price P/U</th>
+        <th>Total</th>
+    </tr>
+
+        @foreach (HoppsWebPlatform_Revamp.Models.ContractContent cont in Model.Content)
+        {
+            <tr>
+                <td>@cont.ItemName</td>
+                <td>@cont.Quantity</td>
+                <td>@cont.PricePerUnit.ToString("n") ISK</td>
+                <td>@((cont.PricePerUnit * cont.Quantity).ToString("n")) ISK</td>
+            </tr>
+        }
+    <tr>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>Sub Total</td>
+        <td>@Model.TotalBeforeReduction.ToString("n") ISK</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>Jita -5%</td>
+        <td style="color: red;">@((Model.Total - Model.TotalBeforeReduction).ToString("n")) ISK</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>Contract Total</td>
+        <td>@Model.Total.ToString("n") ISK</td>
+    </tr>
+    
+</table>
+
+@using (Html.BeginForm("SubmitNewContract", "Contract", FormMethod.Post))
+{
+    <button name="result" value="1" type="submit">Submit</button>
+    <button name="result" value="0" type="submit">Cancel</button>
+}

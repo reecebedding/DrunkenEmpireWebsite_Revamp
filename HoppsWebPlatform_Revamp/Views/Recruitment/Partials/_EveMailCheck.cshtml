@@ -1,0 +1,42 @@
+﻿@model IEnumerable<HoppsWebPlatform_Revamp.Models.MailMessage>
+
+<script>
+    $(document).ready(function () {
+        $("#MailMessageCont").accordion({collapsible: true, active: false});
+    });
+</script>
+
+
+<div class="BackgroundFieldBlock" >
+    <p id="header">EVE Mail Check</p>
+    <div id="MailMessageCont">
+        @if (Model.Count() > 0)
+        {
+            foreach (HoppsWebPlatform_Revamp.Models.MailMessage EVEMail in Model)
+            {
+                <h3>Subject: @EVEMail.Subject</h3>
+                <div class="BackgroundMailBody">
+                    <p>From: @EVEMail.SenderName</p>
+                    <p>To: 
+                        <ul>
+                            @foreach (string pilot in EVEMail.ToPilotNameList.Select(x => x.Value))
+                            { <li>@pilot</li> }
+                            @foreach (string corpName in EVEMail.ToCorporationNameList.Select(x => x.Value))
+                            { <li>@corpName</li> }
+                            @foreach (string mailingList in EVEMail.ToMailingListNameList.Select(x => x.Value))
+                            { <li>@mailingList</li> }                    
+                        </ul>
+                    </p>
+                    <p>
+                        Body: <br />
+                        @EVEMail.Body
+                    </p>
+                </div>
+            }
+        }
+        else
+        {
+            <p>EVE Mails Clear</p>
+        }
+    </div>
+</div>

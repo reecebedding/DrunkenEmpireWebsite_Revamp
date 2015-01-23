@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 13.00
+# Visual Studio 2013
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoppsWebPlatform_Revamp", "HoppsWebPlatform_Revamp\HoppsWebPlatform_Revamp.csproj", "{FD94098C-11C9-4D34-BB50-38C8CCC9090A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{90217322-0693-4187-ABBD-E36B4CBECF39}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FD94098C-11C9-4D34-BB50-38C8CCC9090A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD94098C-11C9-4D34-BB50-38C8CCC9090A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD94098C-11C9-4D34-BB50-38C8CCC9090A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD94098C-11C9-4D34-BB50-38C8CCC9090A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45
+	EndGlobalSection
+EndGlobal

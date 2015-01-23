@@ -1,0 +1,83 @@
+﻿@model IEnumerable<HoppsWebPlatform_Revamp.Models.ShipFittingCheckResult>
+
+<script>
+    $(document).ready(function () {
+        $("#FittingsContainer").accordion({ collapsible: true, active: false });
+    });
+</script>
+
+<div class="BackgroundFieldBlock" >
+
+    <p id="header">Fitting Check</p>
+    <div id="FittingsContainer">
+        @if (Model.Count() > 0)
+        {
+            foreach (HoppsWebPlatform_Revamp.Models.ShipFittingCheckResult fitting in Model)
+            {
+                if (fitting.ErrorMessage != null)
+                {
+                    <h3>@fitting.ErrorMessage</h3>
+                    <div>@fitting.ErrorMessage</div>
+                    continue;
+                }
+                <h3>@fitting.PilotName - @fitting.ShipFitting.Name - @fitting.ShipFitting.ShipType - @(fitting.MissingShipSkills.Count() + fitting.MissingModuleSkills.Count()) Missing</h3>
+                <div class="ShipFitting">
+                    <table>
+                        <tr>
+                            <th>Item</th>
+                            <th>Missing Skills</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                @fitting.ShipFitting.ShipType
+                            </td>
+                            <td>
+                                @if (fitting.MissingShipSkills.Count() > 0)
+                                {
+                                    <ul>
+                                        @foreach (HoppsWebPlatform_Revamp.Models.SkillPrerequisite skill in fitting.MissingShipSkills)
+	                                    {
+		                                    <li>@skill.SkillName : (@skill.CurrentLevel / @skill.RequiredLevel)</li>
+	                                    }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <ul>
+                                        <li>Meets Requirements</li>
+                                    </ul>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Fittings
+                            </td>
+                            <td>
+                                @if (fitting.MissingModuleSkills.Count() > 0)
+                                {
+                                    <ul>
+                                        @foreach (HoppsWebPlatform_Revamp.Models.SkillPrerequisite skill in fitting.MissingModuleSkills)
+	                                    {
+		                                    <li>@skill.SkillName : (@skill.CurrentLevel / @skill.RequiredLevel)</li>
+	                                    }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <ul>
+                                        <li>Meets Requirements</li>
+                                    </ul>                           
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            }
+        }
+        else
+        {
+            <p>Ship Fittings Met</p>
+        }
+    </div>
+</div>

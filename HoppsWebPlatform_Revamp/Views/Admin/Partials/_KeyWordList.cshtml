@@ -1,0 +1,13 @@
+﻿@model IEnumerable<string>
+@{
+    Layout = null;
+}
+    <table>
+    <tr>
+        <th>Words</th>
+    </tr>
+        @foreach (string word in Model)
+        {
+            <tr><td>@word</td></tr>
+        }
+    </table>

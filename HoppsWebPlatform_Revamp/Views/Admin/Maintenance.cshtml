@@ -1,0 +1,21 @@
+﻿@model HoppsWebPlatform_Revamp.Models.MaintenanceViewModel
+
+@{
+    ViewBag.Title = "Maintenance";
+}
+
+<h2>Maintenance</h2>
+
+<fieldset>
+   <legend>Data</legend>
+
+   <p>Refresh Corporation Roster Data : <button onclick="RefreshData(this);" value="/Refresh/refreshcorpmembers">Refresh</button></p>
+   <p>Restart Application Instance : <button onclick="RefreshData(this);" value="/admin/restartInstance">Refresh</button></p>
+
+</fieldset>
+
+<div id="logContainer">
+    @Html.Action("GetEventLogs", "Admin")
+</div>
+
+<script src="../../Scripts/Admin/Maintenance/MaintenanceAdmin.js" type="text/javascript"></script>

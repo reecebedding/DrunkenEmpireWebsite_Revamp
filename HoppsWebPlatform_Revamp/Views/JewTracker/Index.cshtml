@@ -1,0 +1,97 @@
+﻿@model HoppsWebPlatform_Revamp.Models.JewTrackerIndexViewModel
+
+@{
+    ViewBag.Title = "Jew Tracker";
+}
+
+@Scripts.Render("~/bundles/jqueryui")
+@Styles.Render("~/Content/themes/base/css")
+
+<h2>Jew Tracker</h2>
+
+@using (Html.BeginForm())
+{
+    <div id="SearchForm"><p>Date From @Html.TextBox("DateFrom", ((DateTime)ViewBag.DateFrom).ToShortDateString())<span style="color: GrayText;">(MM/DD/YYYY)</span> Date To @Html.TextBox("DateTo", ((DateTime)ViewBag.DateTo).ToShortDateString())<span style="color: GrayText;">(MM/DD/YYYY)</span> <input type='submit' value='search' /></p></div>
+}
+<div id="JTDataGrid">
+    @if (Model != null)
+    {
+        <table>
+            <tr>
+                <th>Rank</th>
+                <th>Pilot</th>
+                <th>Total</th>
+                <th>Contribution</th>
+            </tr>
+            @{
+                int count = 0;
+                if (Model.pilotValues.Count > 0)
+                {
+                    foreach (KeyValuePair<string, decimal> pilotVal in Model.pilotValues)
+	                {
+                        ++count;
+		                <tr>
+                            <td>@count</td>
+                            <td>@pilotVal.Key</td>
+                            <td>@pilotVal.Value.ToString("n2") ISK</td>
+                            <td>@Convert.ToDecimal((pilotVal.Value / Model.totalValue) * 100).ToString("n2") %</td>
+		                </tr>
+	                }
+                }
+                else
+                {
+                    <tr>
+                        <td>0</td>
+                        <td>No Pilots</td>
+                        <td>0 ISK</td>
+                        <td>100 %</td>
+                    </tr>
+                }
+                
+            }
+        </table>
+    }
+</div>
+
+@if (Model != null)
+{
+    <div id="JTBreakDown">
+        @if (Model.pilotValues.Count > 0)
+        {
+            <p>Total Pilots: @Model.pilotValues.Count()</p>
+            <p>Total ISK Taxed: @Model.pilotValues.Select(x => x.Value).Sum().ToString("n2") ISK</p>
+            <br />
+            <p>Top Taxed Pilot: @Model.pilotValues.First().Key</p>
+            <p>Top Taxed Amount: @Model.pilotValues.First().Value.ToString("n2") ISK</p>        
+        }
+        else
+        {
+            <p>Total Pilots: 0</p>
+            <p>Total ISK Taxed: 0 ISK</p>
+            <br />
+            <p>Top Taxed Pilot: --</p>
+            <p>Top Taxed Amount: 0 ISK</p>        
+        }
+    
+</div>    
+}
+
+
+<script type="text/javascript">
+    $("#DateFrom").datepicker({
+        dateFormat: 'dd/mm/yy',
+        changeMonth: true,
+        numberOfMonths: 2,
+        onClose: function (selectedDate) {
+            $("#DateTo").datepicker("option", "minDate", selectedDate);
+        }
+    });
+    $("#DateTo").datepicker({
+        dateFormat:  'dd/mm/yy',
+        changeMonth: true,
+        numberOfMonths: 2,
+        onClose: function (selectedDate) {
+            $("#DateFrom").datepicker("option", "maxDate", selectedDate);
+        }
+    });
+</script>

@@ -1,0 +1,82 @@
+﻿@model HoppsWebPlatform_Revamp.Models.Lottery
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Pap Lottery</h2>
+
+@if (User.IsInRole("Director"))
+{
+    <div id="adminSection">    
+        @if (Model != null)
+        {
+            using (Html.BeginForm("DrawPapRewardLottery", "Tools", FormMethod.Post, new { id = "drawForm" }))
+            {
+                <h3>Current Lottery</h3>
+                <text>Draw: </text> <input type="number" name="drawPilotCount" id="drawPilotCount" min="1" max="@Model.Tickets.Count()" /> <text> winners </text>
+                <input type="submit" value="Draw" />
+            }
+        }            
+        
+        @using (Html.BeginForm("MakeNewPapRewardLottery", "Tools", FormMethod.Post, new { id = "newLotteryForm" }))
+        {
+            <h3>Create new lottery</h3>
+            <p>Lottery Name @Html.TextBox("newLotteryName") </p>
+                
+            <p>Eligible Pilots</p>
+                @Html.TextArea("pilots")
+            <input type="submit" value="Create" />
+        }
+    </div>
+    
+    <div id="currentLottery">
+        <table>
+            @for (int i = 0; i < Model.Tickets.Count(); i++)
+            {
+                var imgURL = "";
+                if (i % 2 != 0)
+                {
+                    <tr>
+                        <td style="width: 300px;@if (Model.Tickets.ToList()[i - 1].WinnerPosition > 0)
+                                            {<text>background-color: #CCFF99;</text>}">
+                            <div style="float: left; vertical-align: middle; width: 30px;"> @i.</div>
+                            <div style="">
+                                @{
+                                    imgURL = "https://image.eveonline.com/Character/" + Model.Tickets.ToList()[i - 1].PilotID + "_200.jpg";
+                                    <div style="width:100%;">
+                                        <img src="@imgURL" width="40px" style="vertical-align: middle;" />
+                                        <span style="vertical-align: middle;">@Model.Tickets.ToList()[i - 1].PilotName</span>
+                                        @if (Model.Tickets.ToList()[i - 1].WinnerPosition > 0)
+                                        {
+                                            <div style="float: right;">
+                                                <div id="lotteryCircle">@Model.Tickets.ToList()[i - 1].WinnerPosition </div>
+                                            </div>
+                                        }
+                                    </div>    
+                                }
+                            </div>
+                        </td>
+                        @if (i + 1 <= Model.Tickets.Count())
+                        {
+                            <td style="width: 300px;@if (Model.Tickets.ToList()[i].WinnerPosition > 0)
+                                          {<text>background-color: #CCFF99;</text>}">
+                                <div style="float: left; vertical-align: middle; width: 30px;"> @(i + 1).</div>
+                                @{
+                                    imgURL = "https://image.eveonline.com/Character/" + Model.Tickets.ToList()[i].PilotID + "_200.jpg";
+                                    <img src="@imgURL" width="40px" style="vertical-align: middle;" />
+                                            <span style="vertical-align: middle;">@Model.Tickets.ToList()[i].PilotName</span>
+                                    if (Model.Tickets.ToList()[i].WinnerPosition > 0)
+                                    {
+                                        <div style="float: right;">
+                                            <div id="lotteryCircle">@Model.Tickets.ToList()[i].WinnerPosition</div>
+                                        </div>
+                                    }
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+}

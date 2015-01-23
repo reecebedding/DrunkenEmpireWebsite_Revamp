@@ -1,0 +1,61 @@
+﻿@model HoppsWebPlatform_Revamp.Models.RecruitmentApplication
+
+@{
+    ViewBag.Title = "Apply To Corp";
+}
+
+<h2>Apply To The Drunken Empire.</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary()
+        
+    if (Model.ApplicantName != null)
+    {
+        @Html.Hidden("ApplicantName", Model.ApplicantName);
+    }
+
+    int qCount = 0;
+    foreach (HoppsWebPlatform_Revamp.Models.RecruitmentApplicationQuestion question in Model.Questions)
+    {
+        <h4>@question.Description</h4>
+    
+        @Html.Hidden("Questions[" + qCount + "].ID", question.ID)
+        @Html.TextArea("Questions[" + qCount + "].Answer", question.Answer)
+        @Html.ValidationMessageFor(x => x.Questions.ToList()[qCount].Answer)
+        <hr />
+        qCount++;
+    }
+    
+    <h4>Additional Comments</h4>
+    @Html.TextAreaFor(item => item.Notes)
+    <hr />
+    <hr />
+    <fieldset id="ApplicationAPIKeys">
+        <button onclick="AddAPISectionToApplication(); return false;">Add API Key</button>
+        <span>Leave the KeyID and vCode blank to remove it from the list.</span>
+        <legend>API Keys</legend>
+        @{
+    int apiCount = 0;
+    foreach (HoppsWebPlatform_Revamp.Models.ApiKey apikey in Model.ApiKeys.GroupBy(x => x.KeyID).Select(x => x.First()).ToList())
+    {
+        string idString = "APIKey_" + apiCount;
+            <div class="APIKey" id="@idString">
+		            <p>KeyID : @Html.TextBox("apiKeys[" + apiCount + "].KeyID", apikey.KeyID)<br />
+                    vCode : @Html.TextBox("apiKeys[" + apiCount + "].VCode", apikey.VCode)</p>    
+            </div>
+
+        apiCount++;
+    }
+        }
+        
+    </fieldset>
+    
+    <p>
+        <input type="submit" value="Apply To Corp" />
+    </p>
+}
+
+
+
+<script src="../../Scripts/Admin/Recruitment/RecruitmentAdmin.js" type="text/javascript"></script>

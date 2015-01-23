@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title.</h1>
+                <h2>@ViewBag.Message</h2>
+            </hgroup>
+            <p>
+                To learn more about ASP.NET MVC visit
+                <a href="http://asp.net/mvc" title="ASP.NET MVC Website">http://asp.net/mvc</a>.
+                The page features <mark>videos, tutorials, and samples</mark> to help you get the most from ASP.NET MVC.
+                If you have any questions about ASP.NET MVC visit
+                <a href="http://forums.asp.net/1146.aspx/1?MVC" title="ASP.NET MVC Forum">our forums</a>.
+            </p>
+        </div>
+    </section>
+<h3>We suggest the following:</h3>
+</br>
+@Html.ActionLink("Recruit Application", "Index", "Recruitment")<br />
+@Html.ActionLink("New Application", "Apply", "Recruitment")<br />
+@Html.ActionLink("Recruit Application Background Check", "BackgroundCheck", "Recruitment", new { appID = 51 }, null)<br />
+@Html.ActionLink("Contract Manager", "Index", "Contract")<br />
+@Html.ActionLink("View Member Profile", "ViewMemberProfile", "Member")<br />
+@Html.ActionLink("My Profile", "MyProfile", "Account")<br />
+@Html.ActionLink("Application Configuration", "Configuration", "Admin")<br />
+@Html.ActionLink("Recruitment Configuration", "Recruitment", "Admin")<br />
+@Html.ActionLink("Fitting Configuration", "FittingManager", "Admin")<br />
+@Html.ActionLink("Application Maintenance", "Maintenance", "Admin")<br />

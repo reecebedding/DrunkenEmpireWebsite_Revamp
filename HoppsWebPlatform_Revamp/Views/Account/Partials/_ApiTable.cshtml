@@ -1,0 +1,149 @@
+﻿@model HoppsWebPlatform_Revamp.Models.APITableViewModel
+       
+
+<script type="text/javascript">
+
+    function SubmitAPIEdit(apiNum) {
+        $.ajax({
+            url: "/api/apikey",
+            type: "POST",
+            dataType: "json",
+            data: $("#apiEdit" + apiNum).serialize(),
+            complete: function (result) {
+                var responseSuccessCont = "<div class='validation-summary-valid-message'><ul>";
+                var responseFailCont = "<div class='validation-summary-errors'><ul>";
+                var contEnd = "</ul></div>";
+                var responseDisplayMarkup = "";
+                debugger;
+                switch (result.status) {
+                    
+                    case 200:
+                        responseDisplayMarkup = responseSuccessCont;
+                        responseDisplayMarkup += "<li>API Successfully Updated</li>";
+                        responseDisplayMarkup += contEnd;
+                        debugger;
+                        $.ajax({
+                            type: "GET",
+                            url: "/Account/GetAPITable/",
+                            data: { pilotName: '@ViewBag.PilotName' },
+                            success: function (jsReturnArgs) {
+                                debugger;
+                                
+
+                                $("#APITableContainer").html(jsReturnArgs);
+                            }                            
+                        });
+                        
+                        break;                    
+                    default:
+                        responseDisplayMarkup = responseFailCont;
+                        var ResultObj = JSON.parse(result.responseText);
+                        var arrayOfErrors = ResultObj.ModelState[Object.keys(ResultObj.ModelState)[0]];
+                        for (var i = 0; i < arrayOfErrors.length; i++) {
+                            responseDisplayMarkup += "<li>" + arrayOfErrors[i] + "</li>";
+                        }
+                        responseDisplayMarkup += contEnd;
+                        break;
+                }
+                $("#validation-summary-cont").html(responseDisplayMarkup);
+            }
+        });
+        return false
+    }
+
+    function DisplayEditAPIForm(apiNum) {
+        var keyID = $("#keyID-" + apiNum).text().trim();
+        var vCode = $("#vCode-" + apiNum).text().trim();
+
+        var editApiMarkup = "<div><form id='apiEdit" + apiNum + "'>";
+        editApiMarkup += "KeyID: <input name='KeyID' style='width: 420px; margin-left: 3px;' type='text' value='" + keyID + "'></input> <br/>";
+        editApiMarkup += "vCode: <input name='VCode' style='width: 420px;' type='text' value='" + vCode + "'></input> <br/>";
+        editApiMarkup += "<input type='hidden' name='ID' value='" + keyID + "'></input>";
+        editApiMarkup += "</form>";
+        editApiMarkup += "<button style='float: left;' onclick='SubmitAPIEdit(" + apiNum + ");' value='" + apiNum + "'>Save</button>";
+        editApiMarkup += "<div style='float: left;' id='validation-summary-cont'></div>";
+        editApiMarkup += "</div>";
+
+        $("#apiKey-" + apiNum).html(editApiMarkup);
+    }
+</script>
+
+<div id="APITableContainer">
+    <table>
+    <tr>
+        <th>
+            API Key
+        </th>
+        <th>
+            Characters
+        </th>
+        @if ((bool)ViewBag.IsActiveUser)
+        {
+            <th>
+                Action
+            </th>
+        }
+    </tr>
+    @if (Model.existingAPIKeys.Count() > 0)
+    {
+        //IEnumerable<HoppsWebPlatform_Revamp.Models.ApiKey> uniqueAPIs = Model.First().Key.GroupBy(x => x.KeyID).Select(x => x.First());
+        IEnumerable<HoppsWebPlatform_Revamp.Models.ApiKey> uniqueAPIs = Model.existingAPIKeys.GroupBy(x => x.KeyID).Select(x => x.First());
+        int curApi = 0;
+        foreach (HoppsWebPlatform_Revamp.Models.ApiKey uniqueAPI in uniqueAPIs)
+        {
+            <tr style="background-color: @if (uniqueAPI.Valid)
+                                         { <text>#E1FFB3</text> }
+                                         else
+                                         { <text>#F7CCC6</text> };" >
+                <td id="apiKey-@curApi">KeyID:<span id='keyID-@curApi'>  @uniqueAPI.KeyID</span> <br />  vCode: <span id='vCode-@curApi'>@uniqueAPI.VCode </span></td>
+                <td>
+                    <ol>
+                    @foreach (HoppsWebPlatform_Revamp.Models.ApiKey pilotAPI in Model.existingAPIKeys.Where(x => x.KeyID == uniqueAPI.KeyID))
+                    {
+                        <li>  @pilotAPI.PilotName</li>
+                    }
+                    </ol>
+                </td>
+                @if ((bool)ViewBag.IsActiveUser)
+                {
+		            <td>
+                        <div onclick="DisplayEditAPIForm(@curApi);" >${EDIT ICON}</div>
+                    </td>
+                }
+        
+            </tr>
+        
+                curApi++;
+        }
+    }
+    else
+    {
+        <tr><td>No API's Present</td><td></td></tr>
+    }
+    </table>
+@using (Ajax.BeginForm("AddAPIKey", "Account", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "APITableContainer" }))
+{
+    <div id="AddAPIContainer">
+        <fieldset style="width: 500px;">
+        <legend>Add API</legend>
+            @*    @Html.ValidationSummary(true)
+                @Html.ValidationSummaryValidMessage();*@
+                <div class="editor-label">
+                        @Html.LabelFor(m => m.newAPIKey.KeyID)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(m => m.newAPIKey.KeyID)
+                        @Html.ValidationMessageFor(m => m.newAPIKey.KeyID)
+                    </div>
+                <div class="editor-label">
+                        @Html.LabelFor(m => m.newAPIKey.VCode)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(m => m.newAPIKey.VCode)
+                        @Html.ValidationMessageFor(m => m.newAPIKey.VCode)
+                    </div>
+            <button name="AddAPIFormSubmit">Submit</button>
+        </fieldset>
+    </div>
+}
+    </div>

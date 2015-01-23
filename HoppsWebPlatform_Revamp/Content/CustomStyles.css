@@ -1,0 +1,19 @@
+﻿.BackgroundFieldBlock #header
+{
+    font-weight: 700;
+}
+
+#JTDataGrid
+{
+    height: 600px;
+    overflow: auto;
+    width: 450px;
+    text-align: center;
+    float: left;
+}
+
+#JTBreakDown
+{
+    float: left;
+    width: 350px;
+}

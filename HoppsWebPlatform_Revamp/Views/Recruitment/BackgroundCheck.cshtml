@@ -1,0 +1,47 @@
+﻿@model HoppsWebPlatform_Revamp.Models.ApplicationBackgroundCheckViewModel
+
+@{
+    ViewBag.Title = Model.Application.ApplicantName + "'s Background Check";
+}
+
+@Scripts.Render("~/bundles/jqueryui")
+@Styles.Render("~/Content/themes/base/css")
+
+<h2>Background check for @Model.Application.ApplicantName</h2>
+<br />
+<div id="BackgroundCheckCont">
+    
+    @Html.Action("GetCFCBlackListCheck", "Recruitment", new { apiKeys = Model.Application.ApiKeys })
+
+    @Html.Action("GetWalletTransferCheck", "Recruitment", new { apiKeys = Model.Application.ApiKeys})
+
+    @Html.Action("GetMailMessageCheck", "Recruitment", new { apiKeys = Model.Application.ApiKeys })
+
+    @Html.Action("GetShipFittingCheck", "Recruitment", new { apiKeys = Model.Application.ApiKeys })
+
+</div>
+
+    <fieldset id="BackgroundActions">
+    <legend>Details And Actions</legend>
+    <p>Status: @Model.Application.Status</p>
+
+    @if (!new string[3] { "Accepted", "Declined", "Escalated" }.Contains(Model.Application.Status))
+    {
+        using (Html.BeginForm("FinalizeBackgroundCheck", "Recruitment", FormMethod.Post))
+        {
+            <p>Notes : @Html.TextArea("Notes")</p>
+            <p>
+                @Html.Hidden("applicationID", Model.Application.ID)
+                <button onclick="SendEveMailAndFinalize(1); return 0;" name="action" value="1">Accept</button>
+                <button onclick="SendEveMailAndFinalize(2); return 0;" name="action" value="2">Decline</button>
+                <button type="submit" name="action" value="3">Escalate</button>
+            </p>
+        }
+    }
+    </fieldset>
+
+<div id="ApplicationBody">
+    @{Html.RenderAction("GetApplicationView", Model.Application);}
+</div>
+
+<script src="../../Scripts/Admin/Recruitment/BackgroundCheck.js" type="text/javascript"></script>

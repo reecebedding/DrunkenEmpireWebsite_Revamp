@@ -1,0 +1,90 @@
+﻿@model HoppsWebPlatform_Revamp.Models.RecruitmentViewModel
+@{
+    ViewBag.Title = "Recruitment Admin";
+}
+
+<h2>Recruitment Administation</h2>
+<fieldset>
+<legend>Questions</legend>
+
+@* Render the partial view containing all the questions   *@
+<div id="QuestionlistCont">
+    @{Html.RenderAction("GetQuestionListView", "Admin");} 
+</div>
+
+
+
+<div style="float: left; display: none;" id="EditQuestionCont" name="EditQuestionCont">
+    <h3>Edit Question</h3>
+        <div class="validation-summary-valid-message"></div>
+        @using (Html.BeginForm("EditQuestion", "Admin", FormMethod.Post, new { name = "EditQuestionForm" }))
+        {
+            @Html.Hidden("ID", "", new { readOnly = true })  
+            
+            @Html.ValidationMessageFor(m => m.Questions.First().Description)
+            <p>Description @Html.TextArea("Description")</p>
+            
+            @Html.ValidationMessageFor(m => m.Questions.First().DataType)
+            <p>Data Type 
+                <select id="DataType" name="DataType">
+                    <option value="Int32">Number</option>
+                    <option value="String">Text</option>
+                </select>
+            </p>            
+            @Html.ValidationMessageFor(m => m.Questions.First().Active)
+            <p>Active @Html.CheckBox("Active")</p>
+            
+            <button onclick="EditQuestion(); return false;">Save</button>
+        }
+</div>
+    
+<button onclick="ShowAddQuestionCont();" id="AddQuestionButton" >Add Question</button>
+
+<div style="float: left; display: none;"  id="AddQuestionCont" name="AddQuestionCont">
+    <h3>Add Question</h3>
+        <div class="validation-summary-valid-message"></div>
+        @using (Html.BeginForm("AddQuestion", "Admin", FormMethod.Post, new { name = "AddQuestionForm" }))
+        {
+            @Html.Hidden("ID", 0)            
+            
+            @Html.ValidationMessageFor(m => m.Questions.First().Description)
+            <p>Description @Html.TextArea("Description")</p>
+            @Html.ValidationMessageFor(m => m.Questions.First().DataType)
+            <p>Data Type 
+                <select id="DataType" name="DataType">
+                    <option value="Int32">Number</option>
+                    <option value="String">Text</option>
+                </select>         
+            </p>
+            @Html.ValidationMessageFor(m => m.Questions.First().Active)
+            <p>Active @Html.CheckBox("Active", true)</p>            
+            <button onclick="AddQuestion(); return false;">Add</button>
+        }
+</div>
+
+</fieldset>
+
+<fieldset>
+<legend>
+    Background Check Keywords
+</legend>
+@*<div id="BackgroundCheckEveMailKeyWords">
+    @{Html.RenderAction("GetKeyWordsListView", "Admin");} 
+</div>*@
+
+<div style="float: left;">
+    <fieldset id="EditKeywordsCont" name="EditKeywordsCont">
+        <legend>Edit Words</legend>
+        <div class="validation-summary-valid-message"></div>
+        @using (Html.BeginForm("EditKeywords", "Admin", FormMethod.Post, new { name = "EditKeywordsForm" }))
+        {
+            <p>Keywords (Seperate with comma) @Html.TextBox("KeyWords", Model.KeyWords)</p>
+
+            <button onclick="EditKeyWords(); return false;">Update</button>
+        }
+    </fieldset>
+</div>
+
+</fieldset>
+
+<script src="../../Scripts/Admin/Recruitment/RecruitmentAdmin.js" type="text/javascript"></script>

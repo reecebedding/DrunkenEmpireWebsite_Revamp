@@ -1,0 +1,53 @@
+﻿@model HoppsWebPlatform_Revamp.Models.ContractViewModel
+@{
+    ViewBag.Title = "Contracts";
+}
+
+<h2>Contracts</h2>
+<h3>@Html.ActionLink("Make new contract", "NewContract", "Contract")</h3>
+
+@if (Model.PersonalContracts != null)
+{
+    <h2>My Contracts</h2>
+    <table>
+        
+    <tr>
+        <th>Created</th>
+        <th>Total</th>
+        <th>Status</th>        
+    </tr>
+    @foreach (HoppsWebPlatform_Revamp.Models.Contract cont in Model.PersonalContracts)
+    {
+        <tr>
+            <td>@cont.Created.ToShortDateString()</td>
+            <td>@cont.Total.ToString("n") ISK</td>
+            <td>@cont.Status</td>
+        </tr>
+    }
+    </table>
+}
+
+@if (Model.AdminContracts != null)
+{
+    <h2>Manage Contracts</h2>
+    <table>
+        
+    <tr>
+        <th>Issued By</th>
+        <th>Created</th>
+        <th>Total</th>
+        <th>Status</th>        
+    </tr>
+    @foreach (HoppsWebPlatform_Revamp.Models.Contract cont in Model.PersonalContracts)
+    {
+        <tr>
+            <td>@cont.Creator</td>
+            <td>@cont.Created.ToShortDateString()</td>
+            <td>@cont.Total.ToString("n") ISK</td>
+            <td>@cont.Status</td>
+            <td>@Html.ActionLink("Complete", "CompleteContract", "Contract") </td>
+        </tr>
+    }
+    </table>
+}
+
