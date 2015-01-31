@@ -13,6 +13,10 @@ using HoppsWebPlatform_Revamp.Models;
 using HoppsWebPlatform_Revamp.Utilities;
 using HoppsWebPlatform_Revamp.DataAccess.Interfaces;
 using HoppsWebPlatform_Revamp.DataAccess;
+using System.Net;
+using System.Text;
+using System.IO;
+using eZet.EveLib.EveAuthModule;
 
 namespace HoppsWebPlatform_Revamp.Controllers
 {
@@ -31,6 +35,110 @@ namespace HoppsWebPlatform_Revamp.Controllers
             _apiRepository = apiRepository;
             _altRepository = altRepositor;
             _logger = new NLog.LogFactory().GetCurrentClassLogger();
+        }
+
+        [AllowAnonymous]
+        public ActionResult EVELogin()
+        {
+            string URL = "https://login.eveonline.com";
+            string path = "/oauth/authorize";
+            string clientID = "7ecb3b4dae284273b8cd96a25c542a01";
+            string secret = "15yxSg7laOFZpPeW6gD9y8R1bBaJ3UuPCho2dg9q";
+            string callbackURL = "http://localhost:5000/Account/CallbackLogin";
+
+            string finalURL = string.Format("{0}{1}?response_type=code&redirect_uri={2}&client_id={3}&scope=&state=12345", URL, path, callbackURL, clientID);
+
+            return Redirect(finalURL);
+        }
+
+        [AllowAnonymous]
+        public ActionResult CallbackLogin(string code)
+        {
+            AuthResponse token = GetCharacterSSOToken(code);
+            VerifyResponse characterDetails = GetCharacterIDFromToken(token);
+
+            FormsAuthentication.SetAuthCookie(characterDetails.CharacterName, true);
+            return RedirectToAction("Index", "Home");
+        }
+
+        private VerifyResponse GetCharacterIDFromToken(AuthResponse token)
+        {
+            string URL = "https://login.eveonline.com";
+            string path = "/oauth/verify";
+            string clientID = "7ecb3b4dae284273b8cd96a25c542a01";
+            string secret = "15yxSg7laOFZpPeW6gD9y8R1bBaJ3UuPCho2dg9q";
+            string callbackURL = "http://localhost:5000/Account/CallbackLogin";
+
+            string finalURL = string.Format("{0}{1}", URL, path);
+            string authHeader = "Bearer " + token.AccessToken;
+
+            HttpWebRequest request = WebRequest.CreateHttp(finalURL);
+            request.Host = "login.eveonline.com";
+            request.UserAgent = "SSO Integration Test, HOPPS DEVELOPER WEB APPLICATION, Client ID: " + clientID;
+
+            request.Headers.Add("Authorization", authHeader);
+            request.Method = "GET";
+
+            string responseData = "";
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                Stream responseStream = response.GetResponseStream();
+                if (responseStream != null)
+                {
+                    using (var reader = new StreamReader(responseStream))
+                    {
+                        responseData = reader.ReadToEnd();
+                    }
+                }
+            }
+            VerifyResponse responseValue = Newtonsoft.Json.JsonConvert.DeserializeObject<VerifyResponse>(responseData);
+            return responseValue;
+        }
+
+        private AuthResponse GetCharacterSSOToken(string code)
+        {
+            string URL = "https://login.eveonline.com";
+            string path = "/oauth/token";
+            string clientID = "7ecb3b4dae284273b8cd96a25c542a01";
+            string secret = "15yxSg7laOFZpPeW6gD9y8R1bBaJ3UuPCho2dg9q";
+            string callbackURL = "http://localhost:5000/Account/CallbackLogin";
+
+            string finalURL = string.Format("{0}{1}", URL, path);
+
+
+            HttpWebRequest request = WebRequest.CreateHttp(finalURL);
+            request.Host = "login.eveonline.com";
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.UserAgent = "SSO Integration Test, HOPPS DEVELOPER WEB APPLICATION, Client ID: " + clientID;
+            
+            request.Headers.Add("Authorization", "Basic " + Base64EncodeAuthString(clientID + ":" + secret));
+            request.Method = "POST";
+
+            string postData = "grant_type=authorization_code&code=" + code;
+            request.ContentLength = postData.Length;
+            using (var writer = new StreamWriter(request.GetRequestStream()))
+                writer.Write(postData);
+
+            string responseData = "";
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                Stream responseStream = response.GetResponseStream();
+                if (responseStream != null)
+                {
+                    using (var reader = new StreamReader(responseStream))
+                    {
+                        responseData = reader.ReadToEnd();
+                    }
+                }
+            }
+            AuthResponse responseValue = Newtonsoft.Json.JsonConvert.DeserializeObject<AuthResponse>(responseData);
+            return responseValue;
+        }
+
+        private string Base64EncodeAuthString(string value)
+        {
+            var plaintTextBytes = System.Text.Encoding.UTF8.GetBytes(value);
+            return System.Convert.ToBase64String(plaintTextBytes);
         }
 
         //
