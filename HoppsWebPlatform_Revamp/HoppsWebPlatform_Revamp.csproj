@@ -362,6 +362,7 @@
     <Content Include="Images\banner.psd" />
     <Content Include="Images\footer.psd" />
     <Content Include="Web_ConnectionStrings.config" />
+    <None Include="Properties\PublishProfiles\revamp.thedrunkenempire.org - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Images\background1.png" />
     <Content Include="Images\background2.png" />
