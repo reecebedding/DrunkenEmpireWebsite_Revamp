@@ -38,6 +38,44 @@ namespace HoppsWebPlatform_Revamp.Controllers
         }
 
         [AllowAnonymous]
+        public ActionResult EVERegister(RegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Attempt to register the user
+                try
+                {                    
+                        //WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new { Email = model.Email });
+                        WebSecurity.CreateUserAndAccount(model.UserName, new Guid().ToString());
+                        _logger.Info(string.Format("User successfully registered"));
+
+                        //If user is in the corporation when they register, add them to the corpmember group.
+                        if (APIHelper.EVE_GetPilotsCorporationID(model.UserName) == 98038363)
+                        {
+                            Roles.AddUserToRole(model.UserName, "CorporationMember");
+                            _logger.Info(string.Format("User was added to the CorpMember group"));
+                        }
+                        else
+                        {
+                            Roles.AddUserToRole(model.UserName, "Guest");
+                            _logger.Info(string.Format("User was added to the Guest group"));
+                        }
+
+                        FormsAuthentication.SetAuthCookie(model.UserName, true);
+                        //WebSecurity.Login(model.UserName, model.Password);
+
+                }
+                catch (MembershipCreateUserException e)
+                {
+                    ModelState.AddModelError("", ErrorCodeToString(e.StatusCode));
+                    _logger.Error(string.Format("An error occured whilst attempting to register: EXN: {0}", e.Message));
+                }
+            }
+            //return View(new RegisterModel() { UserName = IGBHelper.GetPilotName(Request.ServerVariables) });
+            return RedirectToAction("Index", "Home");
+        }
+
+        [AllowAnonymous]
         public ActionResult EVELogin()
         {
             string URL = "https://login.eveonline.com";
@@ -54,10 +92,28 @@ namespace HoppsWebPlatform_Revamp.Controllers
         [AllowAnonymous]
         public ActionResult CallbackLogin(string code)
         {
-            AuthResponse token = GetCharacterSSOToken(code);
-            VerifyResponse characterDetails = GetCharacterIDFromToken(token);
+            try
+            {
+                AuthResponse token = GetCharacterSSOToken(code);
+                VerifyResponse characterDetails = GetCharacterIDFromToken(token);
 
-            FormsAuthentication.SetAuthCookie(characterDetails.CharacterName, true);
+                IEnumerable<Alt> alts = _altRepository.GetAllAltsForPilot(characterDetails.CharacterName);
+
+                string main = alts.FirstOrDefault().MainName;
+
+
+                if (WebSecurity.UserExists(main))
+                    FormsAuthentication.SetAuthCookie(main, true);
+                else
+                    EVERegister(new RegisterModel() { UserName = main });
+            
+            }
+            catch (Exception exn)
+            {
+                _logger.Error(string.Format("Unable to externally login: {0}", exn.Message));
+                return RedirectToAction("Index", "Home");
+            }
+
             return RedirectToAction("Index", "Home");
         }
 
@@ -147,6 +203,8 @@ namespace HoppsWebPlatform_Revamp.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            return RedirectToAction("EVELogin");
+
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -159,6 +217,8 @@ namespace HoppsWebPlatform_Revamp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel model, string returnUrl)
         {
+            return RedirectToAction("EVELogin");
+
             if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
             {
                 Session["pilotID"] = Utilities.APIHelper.EVE_GetPilotIDByName(model.UserName);
@@ -216,13 +276,13 @@ namespace HoppsWebPlatform_Revamp.Controllers
                     {
                         ModelState.AddModelError("", "Unable to retrieve character from API. Please check API and try again.");
                     }
-                        
+
                     //If character exists on API, use can register.
                     if (isAPIValid)
                     {
                         int apiAddVal = 0;
                         _apiRepository.AddAPIKey(new ApiKey() { KeyID = model.KeyID, VCode = model.VCode, PilotName = model.UserName }, out apiAddVal);
-                        WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new { Email = model.Email });                        
+                        WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new { Email = model.Email });
                         _logger.Info(string.Format("User successfully registered"));
 
                         //If user is in the corporation when they register, add them to the corpmember group.
