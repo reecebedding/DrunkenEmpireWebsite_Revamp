@@ -80,9 +80,9 @@ namespace HoppsWebPlatform_Revamp.Controllers
         {
             string URL = "https://login.eveonline.com";
             string path = "/oauth/authorize";
-            string clientID = "7ecb3b4dae284273b8cd96a25c542a01";
-            string secret = "15yxSg7laOFZpPeW6gD9y8R1bBaJ3UuPCho2dg9q";
-            string callbackURL = "http://localhost:5000/Account/CallbackLogin";
+            string clientID = System.Configuration.ConfigurationManager.AppSettings["EVESSOClientID"].ToString();
+            string secret = System.Configuration.ConfigurationManager.AppSettings["EVESSOSecret"].ToString();
+            string callbackURL = System.Configuration.ConfigurationManager.AppSettings["EVESSOCallBackURL"].ToString();
 
             string finalURL = string.Format("{0}{1}?response_type=code&redirect_uri={2}&client_id={3}&scope=&state=12345", URL, path, callbackURL, clientID);
 
@@ -98,8 +98,12 @@ namespace HoppsWebPlatform_Revamp.Controllers
                 VerifyResponse characterDetails = GetCharacterIDFromToken(token);
 
                 IEnumerable<Alt> alts = _altRepository.GetAllAltsForPilot(characterDetails.CharacterName);
-
-                string main = alts.FirstOrDefault().MainName;
+                string main = characterDetails.CharacterName;
+                if (alts.Count() > 0)
+                {
+                    main = alts.FirstOrDefault().MainName;    
+                }
+                
 
 
                 if (WebSecurity.UserExists(main))
@@ -121,9 +125,9 @@ namespace HoppsWebPlatform_Revamp.Controllers
         {
             string URL = "https://login.eveonline.com";
             string path = "/oauth/verify";
-            string clientID = "7ecb3b4dae284273b8cd96a25c542a01";
-            string secret = "15yxSg7laOFZpPeW6gD9y8R1bBaJ3UuPCho2dg9q";
-            string callbackURL = "http://localhost:5000/Account/CallbackLogin";
+            string clientID = System.Configuration.ConfigurationManager.AppSettings["EVESSOClientID"].ToString();
+            string secret = System.Configuration.ConfigurationManager.AppSettings["EVESSOSecret"].ToString();
+            string callbackURL = System.Configuration.ConfigurationManager.AppSettings["EVESSOCallBackURL"].ToString();
 
             string finalURL = string.Format("{0}{1}", URL, path);
             string authHeader = "Bearer " + token.AccessToken;
@@ -155,9 +159,9 @@ namespace HoppsWebPlatform_Revamp.Controllers
         {
             string URL = "https://login.eveonline.com";
             string path = "/oauth/token";
-            string clientID = "7ecb3b4dae284273b8cd96a25c542a01";
-            string secret = "15yxSg7laOFZpPeW6gD9y8R1bBaJ3UuPCho2dg9q";
-            string callbackURL = "http://localhost:5000/Account/CallbackLogin";
+            string clientID = System.Configuration.ConfigurationManager.AppSettings["EVESSOClientID"].ToString();
+            string secret = System.Configuration.ConfigurationManager.AppSettings["EVESSOSecret"].ToString();
+            string callbackURL = System.Configuration.ConfigurationManager.AppSettings["EVESSOCallBackURL"].ToString();
 
             string finalURL = string.Format("{0}{1}", URL, path);
 
