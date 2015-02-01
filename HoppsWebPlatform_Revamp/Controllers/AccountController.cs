@@ -114,7 +114,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
             }
             catch (Exception exn)
             {
-                _logger.Error(string.Format("Unable to externally login: {0}", exn.Message));
+                _logger.Error(string.Format("Unable to externally login: {0}, Inner: {1}", exn.Message, exn.InnerException));
                 return RedirectToAction("Index", "Home");
             }
 
