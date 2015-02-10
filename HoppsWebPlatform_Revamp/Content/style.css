@@ -64,6 +64,19 @@ body {
 	height:0px;	
 }
 
+/*---Content Divs---*/
+.singleColumn{
+	width:100%;
+}
+.doubleColumnLeft{
+	width:50%;
+	float: left;
+}
+.doubleColumnRight{
+	width:50%;
+	float: right;
+}
+
 /*---Headings---*/
 #content h1, h2, h3, h4, h5, h6 {
 	font-style:italic;
@@ -97,53 +110,65 @@ h2 {
 	border:0;
 	background:none;
 }
-.buttonGreenFixed{
+.buttonGreen{
 	display:block;
-	width:200px;
 	height:36px;
-	background-image:url(../images/buttons/buttonGreenFixed.png);
+	background-image:url(../images/buttons/buttonGreenMid.png);
 	text-align:center;
-	padding-top:11px;
-	padding-bottom:11px;
+	padding:9px 20px 9px 20px;
+	border:1px solid #000;
+	/*won't work in IGB*/
+	border-radius:5px; 
+	-moz-border-radius: 5px;
+	-webkit-border-radius:5px;
 }
-.buttonGreenFixed:hover{
-	background-image:url(../images/buttons/buttonGreenFixedUp.png);
+.buttonGreen:hover{
+	background-image:url(../images/buttons/buttonGreenMidUp.png);
 }
-.buttonRedFixed{
+.buttonRed{
 	display:block;
-	width:200px;
 	height:36px;
-	background-image:url(../images/buttons/buttonRedFixed.png);
+	background-image:url(../images/buttons/buttonRedMid.png);
 	text-align:center;
-	padding-top:11px;
-	padding-bottom:11px;
+	padding:9px 20px 9px 20px;
+	border:1px solid #000;
+	/*won't work in IGB*/
+	border-radius:5px; 
+	-moz-border-radius: 5px;
+	-webkit-border-radius:5px;
 }
-.buttonRedFixed:hover{
-	background-image:url(../images/buttons/buttonRedFixedUp.png);
+.buttonRed:hover{
+	background-image:url(../images/buttons/buttonRedMidUp.png);
 }
-.buttonBlueFixed{
+.buttonBlue{
 	display:block;
-	width:200px;
 	height:36px;
-	background-image:url(../images/buttons/buttonBlueFixed.png);
+	background-image:url(../images/buttons/buttonBlueMid.png);
 	text-align:center;
-	padding-top:11px;
-	padding-bottom:11px;
+	padding:9px 20px 9px 20px;
+	border:1px solid #000;
+	/*won't work in IGB*/
+	border-radius:5px; 
+	-moz-border-radius: 5px;
+	-webkit-border-radius:5px;
 }
-.buttonBlueFixed:hover{
-	background-image:url(../images/buttons/buttonBlueFixedUp.png);
+.buttonBlue:hover{
+	background-image:url(../images/buttons/buttonBlueMidUp.png);
 }
-.buttonGreyFixed{
+.buttonGrey{
 	display:block;
-	width:200px;
 	height:36px;
-	background-image:url(../images/buttons/buttonGreyFixed.png);
+	background-image:url(../images/buttons/buttonGreyMid.png);
 	text-align:center;
-	padding-top:11px;
-	padding-bottom:11px;
+	padding:9px 20px 9px 20px;
+	border:1px solid #000;
+	/*won't work in IGB*/
+	border-radius:5px; 
+	-moz-border-radius: 5px;
+	-webkit-border-radius:5px;
 }
-.buttonGreyFixed:hover{
-	background-image:url(../images/buttons/buttonGreyFixedUp.png);
+.buttonGrey:hover{
+	background-image:url(../images/buttons/buttonGreyMidUp.png);
 }
 
 
