@@ -360,6 +360,8 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Images\banner.psd" />
+    <Content Include="Images\EVE_SSO_Login_Buttons_Large_Black.png" />
+    <Content Include="Images\EVE_SSO_Login_Buttons_Small_Black.png" />
     <Content Include="Images\footer.psd" />
     <Content Include="Web_ConnectionStrings.config" />
     <None Include="Properties\PublishProfiles\revamp.thedrunkenempire.org - Web Deploy.pubxml" />
