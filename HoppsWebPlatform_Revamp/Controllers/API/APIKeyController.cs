@@ -29,7 +29,7 @@ namespace HoppsWebPlatform_Revamp.Controllers.API
         /// </summary>
         /// <param name="newAPI">New API to add</param>
         /// <returns>Response message based on the insert</returns>
-        [Authorize]
+        [Attributes.Authorize]
         public HttpResponseMessage Post([FromBody]ApiKey newAPI)
         {
             try
@@ -110,7 +110,7 @@ namespace HoppsWebPlatform_Revamp.Controllers.API
         /// <param name="ID">KeyID of API Key</param>
         /// <param name="newAPI">API to update</param>
         /// <returns>Response message based on procedure</returns>
-        [Authorize]
+        [Attributes.Authorize]
         public HttpResponseMessage Put(int ID, [FromBody]ApiKey newAPI)
         {
             IEnumerable<ApiKey> existingKeys = _apiRepository.GetAllApisForPilot(User.Identity.Name);

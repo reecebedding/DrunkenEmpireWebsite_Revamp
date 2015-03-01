@@ -1,5 +1,10 @@
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(HoppsWebPlatform_Revamp.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(HoppsWebPlatform_Revamp.App_Start.NinjectWebCommon), "Stop")]
+
+
 
 namespace HoppsWebPlatform_Revamp.App_Start
 {
@@ -12,6 +17,7 @@ namespace HoppsWebPlatform_Revamp.App_Start
     using Ninject.Web.Common;
     using HoppsWebPlatform_Revamp.DataAccess.Interfaces;
     using HoppsWebPlatform_Revamp.DataAccess;
+    using HoppsWebPlatform_Revamp.Models;
 
     public static class NinjectWebCommon 
     {
@@ -72,6 +78,9 @@ namespace HoppsWebPlatform_Revamp.App_Start
             kernel.Bind<IRecruitmentRepository>().To<RecruitmentRepository>();
             kernel.Bind<ILotteryRepository>().To<LotteryRepository>();
             kernel.Bind<IContractRepository>().To<ContractRepository>();
+
+            kernel.Bind<ApplicationUserManager>().To<ApplicationUserManager>();
+            kernel.Bind<IUserStore<ApplicationUser>>().ToMethod(x => new UserStore<ApplicationUser>(new ApplicationDbContext()));
         }        
     }
 }

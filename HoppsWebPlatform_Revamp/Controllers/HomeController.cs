@@ -9,6 +9,7 @@ using HoppsWebPlatform_Revamp.DataAccess.Interfaces;
 
 namespace HoppsWebPlatform_Revamp.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : Controller
     {
 

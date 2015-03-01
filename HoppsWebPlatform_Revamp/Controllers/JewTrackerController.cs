@@ -12,7 +12,7 @@ using System.Xml;
 using System.Text;
 namespace HoppsWebPlatform_Revamp.Controllers
 {
-    [Authorize(Roles="Director")]
+    [Attributes.Authorize(Roles = "Director")]
     public class JewTrackerController : Controller
     {
         private IAppSettingsRepository _appSettingsRepository;

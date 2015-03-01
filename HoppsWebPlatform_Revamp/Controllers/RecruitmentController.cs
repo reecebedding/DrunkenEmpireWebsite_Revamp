@@ -44,7 +44,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
         /// Main recruitment screen showing admins the existing applications, and what to do to join etc..
         /// </summary>
         /// <returns>Main recruitment view </returns>
-        [Authorize(Roles="Guest, Director, Recruiter_Jr, Recruiter_Sr")]
+        [Attributes.Authorize(Roles = "Guest, Director, Recruiter_Jr, Recruiter_Sr")]
         public ActionResult Index()
         {
             IEnumerable<RecruitmentApplication> personalApplications = _recruitmentRepository.GetRecruitApplicationsByName(User.Identity.Name);
@@ -77,7 +77,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
         /// Recruit application to corporation
         /// </summary>
         /// <returns>Application to corporation view</returns>
-        [Authorize]
+        [Attributes.Authorize]
         public ActionResult Apply(string userName)
         {
             bool personalCreation = (userName == null);
@@ -295,7 +295,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
         /// </summary>
         /// <param name="app">Application to create</param>
         /// <returns>Switch based on whether the applicaton was created successfully.</returns>
-        [Authorize]
+        [Attributes.Authorize]
         private bool CreateApplication(RecruitmentApplication app, out long appID)
         {
             appID = 0;
@@ -329,7 +329,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
         /// Returns the application successfully created view
         /// </summary>
         /// <returns>Application successfully added view</returns>
-        [Authorize]
+        [Attributes.Authorize]
         public ActionResult ApplicationConfirmation(long appID)
         {
             try
@@ -369,7 +369,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
         /// </summary>
         /// <param name="appID">Application ID to view</param>
         /// <returns>Recruit application view</returns>
-        [Authorize(Roles = "Director, RecruiterSenior")]
+        [Attributes.Authorize(Roles = "Director, RecruiterSenior")]
         [HttpGet]
         public ActionResult ViewApplication(long id)
         {
@@ -392,7 +392,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
         /// <returns>P2 View for application</returns>
         [HttpGet]
         //[OutputCache(Duration = 300, Location = System.Web.UI.OutputCacheLocation.ServerAndClient)]
-        [Authorize(Roles = "Director, RecruiterSenior")]
+        [Attributes.Authorize(Roles = "Director, RecruiterSenior")]
         public ActionResult BackgroundCheck(long appID)
         {
             ApplicationBackgroundCheckViewModel viewModel = new ApplicationBackgroundCheckViewModel();
