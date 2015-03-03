@@ -219,4 +219,8 @@
     <Build Include="Security\aspnet_WebEvent_FullAccess_1.sql" />
     <Build Include="Security\evecruel_revamp_2.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="dev.publish.xml" />
+    <None Include="live.publish.xml" />
+  </ItemGroup>
 </Project>
