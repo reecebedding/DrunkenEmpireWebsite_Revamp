@@ -281,5 +281,8 @@ h2 {
     padding-bottom:2px;
 }
 .registerFormBackground {
-    background-image:url("../Images/Tempest.png")
+    background-image:url("../Images/Tempest.png");
+    background-repeat:no-repeat;
+    background-position:top right;
+    min-height:480px;
 }

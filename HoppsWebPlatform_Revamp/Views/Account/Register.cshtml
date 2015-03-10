@@ -11,36 +11,37 @@
 @using (Html.BeginForm("Register", "Account", FormMethod.Post)) {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary()
-
-<table class="formTable" style="width:100%">
-    <tr>
-        <td>@Html.LabelFor(m => m.UserName)</td>
-        <td>@Html.TextBoxFor(m => m.UserName)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(m => m.Password)</td>
-        <td>@Html.PasswordFor(m => m.Password)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(m => m.ConfirmPassword)</td>
-        <td>@Html.PasswordFor(m => m.ConfirmPassword)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(m => m.KeyID)</td>
-        <td>@Html.TextBoxFor(m => m.KeyID)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(m => m.VCode)</td>
-        <td style="width:400px;">@Html.TextBoxFor(m => m.VCode, new {@class = "authenticationCode"})</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(m => m.Email)</td>
-        <td>@Html.TextBoxFor(m => m.Email)</td>
-    </tr>
-    <tr>
-        <td><input class="buttonGreen" type="submit" value="Register" /></td>
-    </tr>
-</table>
+    <div class="singleColumn registerFormBackground">
+        <table class="formTable">
+            <tr>
+                <td>@Html.LabelFor(m => m.UserName)</td>
+                <td>@Html.TextBoxFor(m => m.UserName)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.Password)</td>
+                <td>@Html.PasswordFor(m => m.Password)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.ConfirmPassword)</td>
+                <td>@Html.PasswordFor(m => m.ConfirmPassword)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.KeyID)</td>
+                <td>@Html.TextBoxFor(m => m.KeyID)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.VCode)</td>
+                <td style="width:400px;">@Html.TextBoxFor(m => m.VCode, new { @class = "authenticationCode" })</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.Email)</td>
+                <td>@Html.TextBoxFor(m => m.Email)</td>
+            </tr>
+            <tr>
+                <td><input class="buttonGreen" type="submit" value="Register" /></td>
+            </tr>
+        </table>
+    </div>
 }
 @*@section Scripts {
         @Scripts.Render("~/bundles/jqueryval")
