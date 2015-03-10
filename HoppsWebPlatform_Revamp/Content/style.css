@@ -1,5 +1,6 @@
 ﻿@charset "utf-8";
 /* CSS Document */
+/*---------------GLOBAL---------------*/
 /* Divs */
 body {
 	background-color:#000;
@@ -92,8 +93,19 @@ h2 {
 	padding-bottom:5px;
 	border-bottom:#999 1px solid;
 }
+/*---Links---*/
+.inlineLink {
+    color:#C00;
+    font-weight:bold;
+}
+.inlineLink:hover {
+    color:#F00;
+}
+.inlineLink:visited {
+    color:#900;
+}
 
-/*---Headings---*/
+/*---Images---*/
 .image{
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -111,6 +123,7 @@ h2 {
 	background:none;
 }
 .buttonGreen{
+    color:#FFF;
 	display:block;
 	height:36px;
 	background-image:url(../images/buttons/buttonGreenMid.png);
@@ -126,6 +139,7 @@ h2 {
 	background-image:url(../images/buttons/buttonGreenMidUp.png);
 }
 .buttonRed{
+    color:#FFF;
 	display:block;
 	height:36px;
 	background-image:url(../images/buttons/buttonRedMid.png);
@@ -141,6 +155,7 @@ h2 {
 	background-image:url(../images/buttons/buttonRedMidUp.png);
 }
 .buttonBlue{
+    color:#FFF;
 	display:block;
 	height:36px;
 	background-image:url(../images/buttons/buttonBlueMid.png);
@@ -156,6 +171,7 @@ h2 {
 	background-image:url(../images/buttons/buttonBlueMidUp.png);
 }
 .buttonGrey{
+    color:#FFF;
 	display:block;
 	height:36px;
 	background-image:url(../images/buttons/buttonGreyMid.png);
@@ -211,4 +227,48 @@ h2 {
 	  padding-top: 15px;
 	  padding-bottom: 15px;
 	}
+}
+
+/*---------------PAGE SPECIFIC---------------*/
+/*---My Profile---*/
+.profileDiv {
+    text-align:center;
+}
+
+.profilePic {
+    text-align:center;
+    border-radius:10px;
+    width:250px;
+    height:250px;
+}
+
+.currentAPITable{
+    width: 90%;
+    text-align:left;
+}
+.currentAPITable td, .currentAPITable th{
+    padding-left:10px;
+    padding-right:10px;
+}
+
+.addAPITable{
+    width: 70%;
+    text-align:left;
+}
+.addAPITable td{
+    padding-left:10px;
+    padding-right:10px;
+}
+.editor-label {
+    width:10%;
+}
+.editor-field {
+    width:100%;
+}
+.editor-submit {
+    text-align:center;
+    width:102px;
+}
+.authenticationCode {
+    width:100%;
 }
