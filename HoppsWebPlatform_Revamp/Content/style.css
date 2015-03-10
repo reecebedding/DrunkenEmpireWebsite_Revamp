@@ -117,7 +117,7 @@ h2 {
 /*---Buttons---*/
 .button {
 	font-size:14px;
-	color: white;
+	color:#FFF;
 	outline:0;
 	border:0;
 	background:none;
@@ -296,4 +296,12 @@ h2 {
 /*---Recruitment---*/
 /*index*/
 
-
+/*ViewApplication*/
+.bgcheckButton{
+    width:420px;
+    margin:10px;
+}
+.actionButton {
+    width:200px;
+    margin:10px;
+}

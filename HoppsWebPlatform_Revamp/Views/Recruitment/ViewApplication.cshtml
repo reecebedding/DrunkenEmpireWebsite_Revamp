@@ -5,42 +5,35 @@
 }
 
 <h2>Recruit Application For @Model.ApplicantName</h2>
+<table class="displayTable">
+    <tr>
+        <th>Status</th>
+        <th>P1 Recruiter</th>
+        <th>P2 Recruiter</th>
+        <th>Elapsed Time</th>
+    </tr>
+    <tr>
+        <td>@Model.Status</td>
+        <td>@Model.P1Recruiter</td>
+        <td>@Model.P2Recruiter</td>
+        <td>
+            @if (Model.Active) 
+                {@((DateTime.Now - Model.P1Timestamp).Days)}
+            else
+                {@((Model.CompletionTimeStamp - Model.P1Timestamp).Days)} Days
+        </td>
+    </tr>
+</table>
 
-<fieldset id="application-details">
-<legend>Details</legend>
-    <div>
-        <div class="question-description">Status</div>
-        <div>@Model.Status</div>
-        <hr />
-    </div>
-    <div>
-        <div class="question-description">P1 Recruiter</div>
-        <div>@Model.P1Recruiter</div>
-        <hr />
-    </div>
-    <div>
-        <div class="question-description">P2 Recruiter</div>
-        <div>@Model.P2Recruiter</div>
-        <hr />
-    </div>
-    <div>
-        <div class="question-description">Elapsed Time</div>
-        <div>@if (Model.Active){@((DateTime.Now - Model.P1Timestamp).Days)}else{@((Model.CompletionTimeStamp - Model.P1Timestamp).Days)} Days</div>
-        <hr />
-    </div>
-</fieldset>
-
-<fieldset id="application-actions">
-<legend>Actions</legend>
-    <div>
-            @Html.ActionLink("Background Check", "BackgroundCheck", new { appID = Model.ID }, new { @class = "ApplicationActionLink" })  <hr />
+<h3>Actions</h3>
+    <div class="singleColumn profileDiv">
+            @Html.ActionLink("Background Check", "BackgroundCheck", new { appID = Model.ID }, new { @class = "buttonGrey bgcheckButton" })  <br />
             @if (User.IsInRole("Director"))
             {
-                @Html.ActionLink("Accept Application", "CompleteApplication", new { appID = Model.ID, result = "Accepted" })
-                @Html.ActionLink("Decline Application", "CompleteApplication", new { appID = Model.ID, result = "Declined" }) <hr />    
+                @Html.ActionLink("Accept Application", "CompleteApplication", new { appID = Model.ID, result = "Accepted" }, new {@class="buttonGreen actionButton"})
+                @Html.ActionLink("Decline Application", "CompleteApplication", new { appID = Model.ID, result = "Declined" }, new { @class = "buttonRed actionButton" }) <hr />    
             }
             
     </div>
-</fieldset>
 
 @{Html.RenderAction("GetApplicationView", Model);}
