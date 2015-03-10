@@ -270,6 +270,12 @@ h2 {
 .authenticationCode {
     width:100%;
 }
+.passwordFormBackground {
+    background-image:url("../Images/Loki.png");
+    background-repeat:no-repeat;
+    background-position:top right;
+    min-height:260px;
+}
 
 /*---Manage Account---*/
 .formTable {

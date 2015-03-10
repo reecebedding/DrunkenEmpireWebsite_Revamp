@@ -9,15 +9,16 @@
     <p class="message-success">@ViewBag.StatusMessage</p>
 
     <p>You're logged in as <strong>@User.Identity.Name</strong>.</p>
-
-    @if (ViewBag.HasLocalPassword)
-    {
-        @Html.Partial("_ChangePasswordPartial")
-    }
-    else
-    {
-        @Html.Partial("_SetPasswordPartial")
-    }
+    <div class="singleColumn passwordFormBackground">
+        @if (ViewBag.HasLocalPassword)
+        {
+            @Html.Partial("_ChangePasswordPartial")
+        }
+        else
+        {
+            @Html.Partial("_SetPasswordPartial")
+        }
+    </div>
 </div>
 @*<section id="externalLogins">
         @Html.Action("RemoveExternalLogins")
