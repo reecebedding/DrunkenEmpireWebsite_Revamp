@@ -241,11 +241,11 @@ h2 {
     height:250px;
 }
 /*_ApiTable*/
-.currentAPITable{
+.displayTable{
     width: 90%;
     text-align:left;
 }
-.currentAPITable td, .currentAPITable th{
+.displayTable td, .displayTable th{
     padding-left:10px;
     padding-right:10px;
 }
@@ -277,7 +277,7 @@ h2 {
     min-height:260px;
 }
 
-/*---Manage Account---*/
+/*---Register---*/
 .formTable {
     text-align:left;
 }
@@ -292,3 +292,8 @@ h2 {
     background-position:top right;
     min-height:480px;
 }
+
+/*---Recruitment---*/
+/*index*/
+
+
