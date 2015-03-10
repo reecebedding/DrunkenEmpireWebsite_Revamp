@@ -9,38 +9,22 @@
 @if (!Html.IsUserInAllRoles(User.Identity.Name, "CorporationMember"))
 {
     if (ViewBag.StatusMessage != null && ViewBag.StatusMessage.Length > 0) { @Html.Raw(@ViewBag.StatusMessage) }
-    else{ <a href="Apply"><button>Apply To The Drunken Empire</button></a> }
+    else{ <a class="buttonGreen" href="Apply">Apply To The Drunken Empire</a> }
 }
 
 
 @if (Html.IsUserInAnyRole(User.Identity.Name, "Director, Recruiter_Jr, Recruiter_Sr"))
 {
-    <fieldset>
-    <legend>Outstanding Applications</legend>
-        <table>
+    <h3>Outstanding Applications</h3>
+        <table class="displayTable">
             <tr>
-                <th>
-                    ApplicantName
-                </th>
-                <th>
-                    Status
-                </th>
-                <th>
-                    P1 Recruiter
-                </th>
-                <th>
-                    Background Check Recruiter
-                </th>
-                <th>
-                    Created
-                </th>
-                <th>
-                    Elapsed
-                </th>
-                <th>
-                    Actions
-                </th>
-        
+                <th>Applicant Name</th>
+                <th>Status</th>
+                <th>P1 Recruiter</th>
+                <th>Background Checker</th>
+                <th>Created</th>
+                <th>Elapsed</th>
+                <th>Actions</th>
             </tr>
 
         @if (Model.Count() > 0)
@@ -49,37 +33,21 @@
             foreach (var item in Model)
             {
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ApplicantName)
-                    </td>
-        
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.P1Recruiter)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.P2Recruiter)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.P1Timestamp)
-                    </td>
-                    <td>
-                        @((DateTime.Now - item.P1Timestamp).Days) Days
-                    </td>
-
-
-                    <td>
-                       @Html.ActionLink("View Application", "ViewApplication", new { id = item.ID })
-                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.ApplicantName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                    <td>@Html.DisplayFor(modelItem => item.P1Recruiter)</td>
+                    <td>@Html.DisplayFor(modelItem => item.P2Recruiter)</td>
+                    <td>@Html.DisplayFor(modelItem => item.P1Timestamp)</td>
+                    <td>@((DateTime.Now - item.P1Timestamp).Days) Days</td>
+                    <td>@Html.ActionLink("View Application", "ViewApplication", new { id = item.ID}, new{@class="inlineLink"})</td>
                 </tr>
             }
         }
         else
         {
-            <td>No Outstanding Applications</td>
+            <tr>
+                <td>No Outstanding Applications</td>
+            </tr>
         }
         </table>
-    </fieldset>
 }
