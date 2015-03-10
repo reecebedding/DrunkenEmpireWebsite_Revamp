@@ -272,10 +272,10 @@ h2 {
 }
 
 /*---Manage Account---*/
-.passwordTable {
+.formTable {
     text-align:left;
 }
-.passwordTable td {
+.formTable td {
     padding-left:10px;
     padding-right:10px;
     padding-bottom:2px;
