@@ -122,6 +122,9 @@ h2 {
 	border:0;
 	background:none;
 }
+.button:hover {
+        text-decoration:none;
+    }
 .buttonGreen{
     color:#FFF;
 	display:block;
