@@ -9,7 +9,7 @@ using System.Web.Security;
 
 namespace HoppsWebPlatform_Revamp.Controllers
 {
-    [Attributes.Authorize(Roles = "CorporationMember")]
+    [Authorize(Roles="CorporationMember")]
     public class ContractController : Controller
     {
         private IContractRepository _contractRepository;

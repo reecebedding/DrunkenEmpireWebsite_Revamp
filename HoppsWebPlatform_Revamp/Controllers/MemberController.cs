@@ -37,7 +37,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
         /// Main entry point for member, contains links to specific member pages.
         /// </summary>
         /// <returns>View of links</returns>
-        [Attributes.Authorize(Roles = "Director")]
+        [Authorize(Roles="Director")]
         public ActionResult Index()
         {
             return View();
@@ -47,7 +47,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
         /// Main view for viewing member profiles
         /// </summary>
         /// <returns></returns>
-        [Attributes.Authorize(Roles = "Director")]
+        [Authorize(Roles="Director")]
         public ActionResult ViewMemberProfile()
         {
             ViewBag.PilotNames = _corpMemberRepository.GetAllCorpMembers().Select(x => x.PilotName);
@@ -59,7 +59,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
         /// </summary>
         /// <param name="pilotName">Pilot name to view profile of</param>
         /// <returns>Member profile for pilot</returns>
-        [Attributes.Authorize(Roles = "Director")]
+        [Authorize(Roles = "Director")]
         [HttpPost]
         public ActionResult ViewMemberProfile(string pilotName)
         {
@@ -80,7 +80,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
         /// </summary>
         /// <param name="pilotName">Pilots name</param>
         /// <returns>Pilots profile</returns>
-        [Attributes.Authorize]
+        [Authorize]
         private PilotProfileViewModel GetPilotsProfile(string pilotName)
         {
             IEnumerable<Alt> chars = _altRepository.GetAllAltsForPilot(pilotName);

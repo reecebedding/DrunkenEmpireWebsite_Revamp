@@ -13,7 +13,7 @@ using System.Text;
 
 namespace HoppsWebPlatform_Revamp.Controllers
 {
-    [Attributes.Authorize(Roles="Director")]
+    [Authorize(Roles="Director")]
     public class AdminController : Controller
     {
     

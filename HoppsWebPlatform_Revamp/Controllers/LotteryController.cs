@@ -8,7 +8,7 @@ using HoppsWebPlatform_Revamp.DataAccess.Interfaces;
 
 namespace HoppsWebPlatform_Revamp.Controllers
 {
-    [Attributes.Authorize(Roles = "Director")]
+    [Authorize(Roles = "Director")]
     public class LotteryController : Controller
     {
         private NLog.Logger _logger;
