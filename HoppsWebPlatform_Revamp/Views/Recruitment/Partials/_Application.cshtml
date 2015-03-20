@@ -3,14 +3,15 @@
     Layout = null;
 }
 
-<fieldset id="application-question-list">
-<legend>Application</legend>
+<h3>Application</h3>
 @{
     bool questionSwitch = true;
     
     <div class="question-description">Notes</div>        
     <div>@Html.Raw(Model.Notes)</div><br /> 
-     
+    
+    
+    
     foreach (HoppsWebPlatform_Revamp.Models.RecruitmentApplicationQuestion question in Model.Questions)
     {
         <div class="@{if (questionSwitch)
@@ -19,9 +20,7 @@
                       {<text>application-question-2</text>}}">
             <div class="question-description">@question.Description</div>
             <div>@question.Answer</div>
-            <hr />
         </div>
         questionSwitch = !questionSwitch;
     }
 }
-</fieldset>

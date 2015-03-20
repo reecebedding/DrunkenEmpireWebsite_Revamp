@@ -308,3 +308,7 @@ h2 {
     width:200px;
     margin:10px;
 }
+.question-description {
+    font-weight:bold;
+    padding-top:10px;
+}

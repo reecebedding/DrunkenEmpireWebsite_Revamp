@@ -5,7 +5,7 @@
 }
 
 <h2>Recruit Application For @Model.ApplicantName</h2>
-<table class="displayTable">
+<table class="displayTable" style="width:auto;">
     <tr>
         <th>Status</th>
         <th>P1 Recruiter</th>
@@ -27,11 +27,11 @@
 
 <h3>Actions</h3>
     <div class="singleColumn profileDiv">
-            @Html.ActionLink("Background Check", "BackgroundCheck", new { appID = Model.ID }, new { @class = "buttonGrey bgcheckButton" })  <br />
+            @Html.ActionLink("Background Check", "BackgroundCheck", new { appID = Model.ID }, new { @class = "button buttonGrey bgcheckButton" })
             @if (User.IsInRole("Director"))
             {
-                @Html.ActionLink("Accept Application", "CompleteApplication", new { appID = Model.ID, result = "Accepted" }, new {@class="buttonGreen actionButton"})
-                @Html.ActionLink("Decline Application", "CompleteApplication", new { appID = Model.ID, result = "Declined" }, new { @class = "buttonRed actionButton" }) <hr />    
+                @Html.ActionLink("Accept Application", "CompleteApplication", new { appID = Model.ID, result = "Accepted" }, new {@class="button buttonGreen actionButton"})
+                @Html.ActionLink("Decline Application", "CompleteApplication", new { appID = Model.ID, result = "Declined" }, new { @class = "button buttonRed actionButton" })    
             }
             
     </div>
