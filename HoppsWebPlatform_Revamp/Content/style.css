@@ -29,14 +29,18 @@ body {
     background-repeat: no-repeat;
 }
 
+#bannerTitle {
+
+}
+
 .navigation {
 	height: 50px;
-	width: 100%;
 	position:relative;
 	right: 0px;
 	bottom: 0px;
 	padding-left: 1px;
 	padding-right: 1px;
+    z-index:10;
 }
 
 .nav-login{
@@ -95,14 +99,14 @@ h2 {
 }
 /*---Links---*/
 .inlineLink {
-    color:#C00;
+    color:#900;
     font-weight:bold;
 }
 .inlineLink:hover {
-    color:#F00;
+    color:#C00;
 }
-.inlineLink:visited {
-    color:#900;
+.inlineLink:visited, .inlineLink:focus {
+    color:#600;
 }
 
 /*---Images---*/
