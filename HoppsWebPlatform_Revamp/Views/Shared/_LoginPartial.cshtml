@@ -17,7 +17,8 @@
 else
 {
     <ul class="nav navbar-nav navbar-right nav-login">
-        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        @*<li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>*@
+        @*<li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>*@
+        <li><a href="@Url.Action("EVELogin", "Account")"><img src="~/Images/EVE_SSO_Login_Buttons_Small_Black.png" /></a></li>
     </ul>
 }

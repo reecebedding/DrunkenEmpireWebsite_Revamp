@@ -13,6 +13,10 @@ using HoppsWebPlatform_Revamp.Models;
 using HoppsWebPlatform_Revamp.Utilities;
 using HoppsWebPlatform_Revamp.DataAccess.Interfaces;
 using HoppsWebPlatform_Revamp.DataAccess;
+using System.Net;
+using System.Text;
+using System.IO;
+using eZet.EveLib.EveAuthModule;
 
 namespace HoppsWebPlatform_Revamp.Controllers
 {
@@ -33,14 +37,186 @@ namespace HoppsWebPlatform_Revamp.Controllers
             _logger = new NLog.LogFactory().GetCurrentClassLogger();
         }
 
+        [AllowAnonymous]
+        public ActionResult EVERegister(RegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Attempt to register the user
+                try
+                {                    
+                        //WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new { Email = model.Email });
+                        WebSecurity.CreateUserAndAccount(model.UserName, new Guid().ToString());
+                        _logger.Info(string.Format("User successfully registered"));
+
+                        //If user is in the corporation when they register, add them to the corpmember group.
+                        if (APIHelper.EVE_GetPilotsCorporationID(model.UserName) == 98038363)
+                        {
+                            Roles.AddUserToRole(model.UserName, "CorporationMember");
+                            _logger.Info(string.Format("User was added to the CorpMember group"));
+                        }
+                        else
+                        {
+                            Roles.AddUserToRole(model.UserName, "Guest");
+                            _logger.Info(string.Format("User was added to the Guest group"));
+                        }
+
+                        FormsAuthentication.SetAuthCookie(model.UserName, true);
+                        //WebSecurity.Login(model.UserName, model.Password);
+
+                }
+                catch (MembershipCreateUserException e)
+                {
+                    ModelState.AddModelError("", ErrorCodeToString(e.StatusCode));
+                    _logger.Error(string.Format("An error occured whilst attempting to register: EXN: {0}", e.Message));
+                }
+            }
+            //return View(new RegisterModel() { UserName = IGBHelper.GetPilotName(Request.ServerVariables) });
+            return RedirectToAction("Index", "Home");
+        }
+
+        [AllowAnonymous]
+        public ActionResult EVELogin()
+        {
+            string URL = "https://login.eveonline.com";
+            string path = "/oauth/authorize";
+            string clientID = System.Configuration.ConfigurationManager.AppSettings["EVESSOClientID"].ToString();
+            string secret = System.Configuration.ConfigurationManager.AppSettings["EVESSOSecret"].ToString();
+            string callbackURL = System.Configuration.ConfigurationManager.AppSettings["EVESSOCallBackURL"].ToString();
+
+            string finalURL = string.Format("{0}{1}?response_type=code&redirect_uri={2}&client_id={3}&scope=&state=12345", URL, path, callbackURL, clientID);
+
+            return Redirect(finalURL);
+        }
+
+        [AllowAnonymous]
+        public ActionResult CallbackLogin(string code)
+        {
+            try
+            {
+                AuthResponse token = GetCharacterSSOToken(code);
+                VerifyResponse characterDetails = GetCharacterIDFromToken(token);
+
+                IEnumerable<Alt> alts = _altRepository.GetAllAltsForPilot(characterDetails.CharacterName);
+                string main = characterDetails.CharacterName;
+                if (alts.Count() > 0)
+                {
+                    main = alts.FirstOrDefault().MainName;    
+                }
+                
+
+
+                if (WebSecurity.UserExists(main))
+                    FormsAuthentication.SetAuthCookie(main, true);
+                else
+                    EVERegister(new RegisterModel() { UserName = main });
+            
+            }
+            catch (Exception exn)
+            {
+                _logger.Error(string.Format("Unable to externally login: {0}, Inner: {1}", exn.Message, exn.InnerException));
+                return RedirectToAction("Index", "Home");
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        private VerifyResponse GetCharacterIDFromToken(AuthResponse token)
+        {
+            string URL = "https://login.eveonline.com";
+            string path = "/oauth/verify";
+            string clientID = System.Configuration.ConfigurationManager.AppSettings["EVESSOClientID"].ToString();
+            string secret = System.Configuration.ConfigurationManager.AppSettings["EVESSOSecret"].ToString();
+            string callbackURL = System.Configuration.ConfigurationManager.AppSettings["EVESSOCallBackURL"].ToString();
+
+            string finalURL = string.Format("{0}{1}", URL, path);
+            string authHeader = "Bearer " + token.AccessToken;
+
+            HttpWebRequest request = WebRequest.CreateHttp(finalURL);
+            request.Host = "login.eveonline.com";
+            request.UserAgent = "SSO Integration Test, HOPPS DEVELOPER WEB APPLICATION, Client ID: " + clientID;
+
+            request.Headers.Add("Authorization", authHeader);
+            request.Method = "GET";
+
+            string responseData = "";
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                Stream responseStream = response.GetResponseStream();
+                if (responseStream != null)
+                {
+                    using (var reader = new StreamReader(responseStream))
+                    {
+                        responseData = reader.ReadToEnd();
+                    }
+                }
+            }
+            VerifyResponse responseValue = Newtonsoft.Json.JsonConvert.DeserializeObject<VerifyResponse>(responseData);
+            return responseValue;
+        }
+
+        private AuthResponse GetCharacterSSOToken(string code)
+        {
+            string URL = "https://login.eveonline.com";
+            string path = "/oauth/token";
+            string clientID = System.Configuration.ConfigurationManager.AppSettings["EVESSOClientID"].ToString();
+            string secret = System.Configuration.ConfigurationManager.AppSettings["EVESSOSecret"].ToString();
+            string callbackURL = System.Configuration.ConfigurationManager.AppSettings["EVESSOCallBackURL"].ToString();
+
+            string finalURL = string.Format("{0}{1}", URL, path);
+
+
+            HttpWebRequest request = WebRequest.CreateHttp(finalURL);
+            request.Host = "login.eveonline.com";
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.UserAgent = "SSO Integration Test, HOPPS DEVELOPER WEB APPLICATION, Client ID: " + clientID;
+            
+            request.Headers.Add("Authorization", "Basic " + Base64EncodeAuthString(clientID + ":" + secret));
+            request.Method = "POST";
+
+            string postData = "grant_type=authorization_code&code=" + code;
+            request.ContentLength = postData.Length;
+            using (var writer = new StreamWriter(request.GetRequestStream()))
+                writer.Write(postData);
+
+            string responseData = "";
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                Stream responseStream = response.GetResponseStream();
+                if (responseStream != null)
+                {
+                    using (var reader = new StreamReader(responseStream))
+                    {
+                        responseData = reader.ReadToEnd();
+                    }
+                }
+            }
+            AuthResponse responseValue = Newtonsoft.Json.JsonConvert.DeserializeObject<AuthResponse>(responseData);
+            return responseValue;
+        }
+
+        private string Base64EncodeAuthString(string value)
+        {
+            var plaintTextBytes = System.Text.Encoding.UTF8.GetBytes(value);
+            return System.Convert.ToBase64String(plaintTextBytes);
+        }
+
         //
         // GET: /Account/Login
 
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            //return RedirectToAction("EVELogin");
             ViewBag.ReturnUrl = returnUrl;
             return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult Unauthorized(string returnUrl)
+        {
+            ViewBag.message = "Unauthorized. Please contact a director!";
+            return View("Login");
         }
 
         //
@@ -51,6 +227,8 @@ namespace HoppsWebPlatform_Revamp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel model, string returnUrl)
         {
+            return RedirectToAction("EVELogin");
+
             if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
             {
                 Session["pilotID"] = Utilities.APIHelper.EVE_GetPilotIDByName(model.UserName);
@@ -108,13 +286,13 @@ namespace HoppsWebPlatform_Revamp.Controllers
                     {
                         ModelState.AddModelError("", "Unable to retrieve character from API. Please check API and try again.");
                     }
-                        
+
                     //If character exists on API, use can register.
                     if (isAPIValid)
                     {
                         int apiAddVal = 0;
                         _apiRepository.AddAPIKey(new ApiKey() { KeyID = model.KeyID, VCode = model.VCode, PilotName = model.UserName }, out apiAddVal);
-                        WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new { Email = model.Email });                        
+                        WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new { Email = model.Email });
                         _logger.Info(string.Format("User successfully registered"));
 
                         //If user is in the corporation when they register, add them to the corpmember group.
