@@ -236,13 +236,23 @@ h2 {
 	}
 	#banner { 
 	  background-repeat:no-repeat;
+      height: 150px;
 	}
     #bannerTitle {
-    line-height:1.25;
-    padding-top:10px;
+      line-height:1.25;
+      padding-top:10px;
+      width:100%;
+    }
+    #nav-container {
+      width:100%;
+      float:none;
+    }
+    .navigation {
+      min-width:0px;
+      display:inline-block;
     }
     #siteTitle {
-    font-size:37px;
+      font-size:37px;
     }
 	#footer {
 	  background-image:none;
