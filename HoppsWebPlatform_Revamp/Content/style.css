@@ -26,25 +26,43 @@ body {
 #banner {
 	width: 100%;
 	height: 100px;
-	background-image:url(../images/banner.png);
+	/*background-image:url(../images/banner.png);*/
     background-repeat: no-repeat;
 }
 
 #bannerTitle {
     height:100px;
+    display:inline-block;
+    width:600px;
+    float:left;
+    line-height:1.15;
+    color:#fff;
+    font-family:Arial;
+    padding-left:15px;
+}
+
+.titleLink, .titleLink:hover, .titleLink:visited, .titleLink:focus {
+    color:#fff;
+    text-decoration:none;
+}
+
+#siteTitle {
+    font-size:60px;
+}
+#siteMotto {
+    font-size:20px;
 }
 
 #nav-container {
-    min-width:0px;
+    text-align:right;
+    display:inline-block;
+    float:right;
 }
 
 .navigation {
 	height: 50px;
-    display:inline-block;
-    float:right;
 	padding-left: 1px;
 	padding-right: 1px;
-    z-index:10;
 }
 
 .nav-login{
@@ -216,10 +234,16 @@ h2 {
 	  overflow:visible;
 	  height:auto;
 	}
-	#banner {
-	  background-image:url(../images/banner640.png); 
+	#banner { 
 	  background-repeat:no-repeat;
 	}
+    #bannerTitle {
+    line-height:1.25;
+    padding-top:10px;
+    }
+    #siteTitle {
+    font-size:37px;
+    }
 	#footer {
 	  background-image:none;
 	}
