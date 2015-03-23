@@ -1,7 +1,7 @@
 ﻿@charset "utf-8";
 /* CSS Document */
 /*---------------GLOBAL---------------*/
-/* Divs */
+/*---Divs---*/
 body {
 	background-color:#000;
 	background-image:url(../images/background1.png);
@@ -22,6 +22,7 @@ body {
 	right:0;
 }
 
+/*---Banner---*/
 #banner {
 	width: 100%;
 	height: 100px;
@@ -30,14 +31,17 @@ body {
 }
 
 #bannerTitle {
+    height:100px;
+}
 
+#nav-container {
+    min-width:0px;
 }
 
 .navigation {
 	height: 50px;
-	position:relative;
-	right: 0px;
-	bottom: 0px;
+    display:inline-block;
+    float:right;
 	padding-left: 1px;
 	padding-right: 1px;
     z-index:10;
@@ -46,6 +50,7 @@ body {
 .nav-login{
 }
 
+/*---Other Layout Divs---*/
 #content {
 	width: 100%;
 	height: 668px;
@@ -121,17 +126,18 @@ h2 {
 /*---Buttons---*/
 .button {
 	font-size:14px;
+    display:inline-block;
 	color:#FFF;
 	outline:0;
 	border:0;
 	background:none;
 }
 .button:hover {
-        text-decoration:none;
+    color:#FFF;
+    text-decoration:none;
     }
 .buttonGreen{
     color:#FFF;
-	display:block;
 	height:36px;
 	background-image:url(../images/buttons/buttonGreenMid.png);
 	text-align:center;
@@ -147,7 +153,6 @@ h2 {
 }
 .buttonRed{
     color:#FFF;
-	display:block;
 	height:36px;
 	background-image:url(../images/buttons/buttonRedMid.png);
 	text-align:center;
@@ -163,7 +168,6 @@ h2 {
 }
 .buttonBlue{
     color:#FFF;
-	display:block;
 	height:36px;
 	background-image:url(../images/buttons/buttonBlueMid.png);
 	text-align:center;
@@ -179,8 +183,8 @@ h2 {
 }
 .buttonGrey{
     color:#FFF;
-	display:block;
 	height:36px;
+    display:inline-block;
 	background-image:url(../images/buttons/buttonGreyMid.png);
 	text-align:center;
 	padding:9px 20px 9px 20px;
