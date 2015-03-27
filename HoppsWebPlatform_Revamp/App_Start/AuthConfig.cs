@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Web.WebPages.OAuth;
 using HoppsWebPlatform_Revamp.Models;
+using WebMatrix.WebData;
 
 namespace HoppsWebPlatform_Revamp
 {
@@ -27,6 +28,21 @@ namespace HoppsWebPlatform_Revamp
             //    appSecret: "");
 
             //OAuthWebSecurity.RegisterGoogleClient();
+        }
+
+        public static void InitSimpleMembership()
+        {
+            try
+            {
+                if (!WebSecurity.Initialized)
+                {
+                    WebSecurity.InitializeDatabaseConnection("LiveTest", "webpages_Users", "UserID", "UserName", autoCreateTables: false);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("The ASP.NET Simple Membership database could not be initialized.", ex);
+            }
         }
     }
 }

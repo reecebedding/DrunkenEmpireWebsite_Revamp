@@ -59,6 +59,8 @@ namespace HoppsWebPlatform_Revamp
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+
+            AuthConfig.InitSimpleMembership();
         }
 
         protected void Application_EndRequest()

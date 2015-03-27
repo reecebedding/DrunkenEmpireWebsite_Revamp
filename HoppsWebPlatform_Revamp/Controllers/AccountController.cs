@@ -21,7 +21,6 @@ using eZet.EveLib.EveAuthModule;
 namespace HoppsWebPlatform_Revamp.Controllers
 {
     [Authorize]
-    [InitializeSimpleMembership]
     public class AccountController : Controller
     {
         #region Properties
