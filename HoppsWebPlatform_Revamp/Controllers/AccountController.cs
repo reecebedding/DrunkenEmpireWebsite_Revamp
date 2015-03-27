@@ -21,7 +21,6 @@ using eZet.EveLib.EveAuthModule;
 namespace HoppsWebPlatform_Revamp.Controllers
 {
     [Authorize]
-    [InitializeSimpleMembership]
     public class AccountController : Controller
     {
         #region Properties
@@ -207,10 +206,16 @@ namespace HoppsWebPlatform_Revamp.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            return RedirectToAction("EVELogin");
-
+            //return RedirectToAction("EVELogin");
             ViewBag.ReturnUrl = returnUrl;
             return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult Unauthorized(string returnUrl)
+        {
+            ViewBag.message = "Unauthorized. Please contact a director!";
+            return View("Login");
         }
 
         //

@@ -1,0 +1,5 @@
+﻿CREATE PROCEDURE [dbo].[Web_Log_Get_All_Logs]
+AS
+	SELECT TOP 1000 * FROM Logs
+	ORDER BY TimeStamp DESC
+RETURN 0

@@ -1,9 +1,13 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 13.00
+Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoppsWebPlatform_Revamp", "HoppsWebPlatform_Revamp\HoppsWebPlatform_Revamp.csproj", "{FD94098C-11C9-4D34-BB50-38C8CCC9090A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{90217322-0693-4187-ABBD-E36B4CBECF39}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database_2012", "Database_2012\Database_2012.sqlproj", "{91A69ED2-E32A-46A5-BFAA-DE41BD142FD4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,12 @@ Global
 		{FD94098C-11C9-4D34-BB50-38C8CCC9090A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD94098C-11C9-4D34-BB50-38C8CCC9090A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD94098C-11C9-4D34-BB50-38C8CCC9090A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91A69ED2-E32A-46A5-BFAA-DE41BD142FD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91A69ED2-E32A-46A5-BFAA-DE41BD142FD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91A69ED2-E32A-46A5-BFAA-DE41BD142FD4}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{91A69ED2-E32A-46A5-BFAA-DE41BD142FD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91A69ED2-E32A-46A5-BFAA-DE41BD142FD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91A69ED2-E32A-46A5-BFAA-DE41BD142FD4}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
