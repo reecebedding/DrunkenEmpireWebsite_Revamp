@@ -15,7 +15,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
     public class RecruitmentController : Controller
     {
 
-    #region Properties
+        #region Properties
 
         private NLog.Logger _logger;
         private IRecruitmentRepository _recruitmentRepository;
@@ -23,7 +23,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
         private IAltRepository _altRepository;
         private IEveDBRepository _eveDbRepository;
 
-    #endregion
+        #endregion
 
         /// <summary>
         /// Constructor
@@ -38,13 +38,13 @@ namespace HoppsWebPlatform_Revamp.Controllers
         }
 
         /* **************** Application Related Methods ************* */
-    #region P1 Related Methods
+        #region P1 Related Methods
 
         /// <summary>
         /// Main recruitment screen showing admins the existing applications, and what to do to join etc..
         /// </summary>
         /// <returns>Main recruitment view </returns>
-        [Authorize(Roles="Guest, Director, Recruiter_Jr, Recruiter_Sr")]
+        [Authorize(Roles = "Guest, Director, Recruiter_Jr, Recruiter_Sr")]
         public ActionResult Index()
         {
             IEnumerable<RecruitmentApplication> personalApplications = _recruitmentRepository.GetRecruitApplicationsByName(User.Identity.Name);
@@ -100,13 +100,13 @@ namespace HoppsWebPlatform_Revamp.Controllers
                 string statusMessage = "";
                 switch (applications.First(x => x.Active).Status)
                 {
-                    case "Rejected" :
+                    case "Rejected":
                         statusMessage = "Unfortunatly " + userName + "'s application to The Drunken Empire has been rejected";
                         break;
-                    case "Accepted" :
+                    case "Accepted":
                         statusMessage = userName + "'s application to The Drunken Empire has been accepted. Please get in contact with Natalie Cruella or TheCenobite to continue with joining.";
                         break;
-                    default :
+                    default:
                         statusMessage = userName + "'s application is still in process, please wait or contact a recruiter in our public channel <button onclick\"CCPEVE.joinChannel('HOPPS BREWERY');\">HOPPS BREWERY</button>";
                         break;
                 }
@@ -121,7 +121,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
                 ApplicantName = (personalCreation) ? null : userName,
                 ApiKeys = _apiRepository.GetAllApisForPilot(userName)
             };
-            
+
             return View(baseApplication);
         }
 
@@ -133,14 +133,14 @@ namespace HoppsWebPlatform_Revamp.Controllers
         [HttpPost]
         public ActionResult Apply(RecruitmentApplication app)
         {
-            if (app.ApplicantName != null &&  (User.Identity.Name.ToUpper() != app.ApplicantName.ToUpper()))
+            if (app.ApplicantName != null && (User.Identity.Name.ToUpper() != app.ApplicantName.ToUpper()))
             {
                 if (!CustomHTMLHelpers.IsUserInAnyRole(User.Identity.Name, "Director,RecruiterSenior,RecruiterJunior"))
                 {
                     ModelState.AddModelError("", "Applicant name missing or you are not authorised to perform applications");
                 }
             }
-            
+
             //If the applicant name is null, then its a self application. Set the name as the current user
             if (app.ApplicantName == null)
                 app.ApplicantName = User.Identity.Name;
@@ -195,7 +195,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
                 _logger.Error(string.Format("Failed to add API for recruit application - Exception : {0}", exn.Message));
                 return View("~/CustomError.cshtml", "API Failed to be added to your application. Please contact a Director or try again.");
             }
-            
+
             //If the whole model is valid, proceed
             if (ModelState.IsValid)
             {
@@ -218,7 +218,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
                 {
                     _logger.Error(string.Format("User failed to create a recruit application - Exception : {0}", exn.Message));
                     return View("~/CustomError.cshtml", "Failed to create your recruit application. Please contact a Director or try again.");
-                } 
+                }
                 bool apiSuccess = true;
                 //If everything was a success, show the appropriate screens
                 return (success && apiSuccess) ? RedirectToAction("ApplicationConfirmation", new { appID = appID }) : RedirectToAction("ApplicationFailed");
@@ -287,7 +287,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
                 _logger.Error(string.Format("An error occured whilst trying to add an API for recruit application. Exception: {0}", exn.Message));
                 ModelState.AddModelError("apikeys[" + position + "].KeyID", "Error occured whilst checking API. Please try again, or contact an admin");
                 return false;
-            }            
+            }
         }
 
         /// <summary>
@@ -322,7 +322,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
             {
                 _logger.Error(string.Format("An error occured whilst attempting to create a recruit application for : {0}. Exception: {1}", app.ApplicantName, exn.Message));
                 return false;
-            }           
+            }
         }
 
         /// <summary>
@@ -346,13 +346,13 @@ namespace HoppsWebPlatform_Revamp.Controllers
                 return View("~/CustomError.cshtml", "An error occured whilst displaying your confirmation. However your application was successfully submitted.");
             }
 
-        }     
+        }
 
-    #endregion
+        #endregion
 
         /* ************ Security Check Related Methods ************ */
 
-    #region Security Check Related Methods
+        #region Security Check Related Methods
 
         /// <summary>
         /// Gets the base recruitment application view
@@ -411,7 +411,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
             {
                 _logger.Error(string.Format("An error occured whilst creating background check view for application: {0}. Exception: {1}", appID, exn.Message));
                 return View("~/CustomError.cshtml", "An error occured whilst attempting to create background check page. Please try again or contact an admin");
-            }               
+            }
         }
 
         /// <summary>
@@ -420,7 +420,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
         /// <param name="characters">List of apis to get characters for the application</param>
         /// <returns>View for the CFC blacklist section</returns>
         public PartialViewResult GetCFCBlackListCheck(IEnumerable<ApiKey> apiKeys)
-        {            
+        {
             Dictionary<string, bool> blackListed = new Dictionary<string, bool>();
             foreach (ApiKey key in apiKeys)
             {
@@ -431,13 +431,15 @@ namespace HoppsWebPlatform_Revamp.Controllers
                         bool listed = APIHelper.RC_IsPilotBlacklisted(pilot);
                         if (!blackListed.Contains(new KeyValuePair<string, bool>(pilot, listed)))
                         {
-                            blackListed.Add(pilot, listed);    
+                            blackListed.Add(pilot, listed);
                         }
                     }
                     catch (Exception exn)
                     {
                         _logger.Error(string.Format("An error occured whilst attempting to get black list check on: {0}. Exception : {1}", pilot, exn.Message));
-                        return PartialView("~/Shared/CustomError.cshtml");
+                        ViewBag.Header = "CFC Blacklist Check";
+                        ViewBag.Message = "Unable to retrieve blacklist data from CFC. Please check manually!";
+                        return PartialView("Partials/_BackgroundCheckFailed");
                     }
                 }
             }
@@ -451,7 +453,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
         /// <returns>Viewfor the Wallet Journal section</returns>
         public PartialViewResult GetWalletTransferCheck(IEnumerable<ApiKey> apiKeys)
         {
-            List<WalletJournalEntry> entries = new List<WalletJournalEntry>();                
+            List<WalletJournalEntry> entries = new List<WalletJournalEntry>();
 
             try
             {
@@ -463,7 +465,9 @@ namespace HoppsWebPlatform_Revamp.Controllers
             catch (Exception exn)
             {
                 _logger.Error(string.Format("An error occured whilst attempting to retrieve wallet transfer markup. Exception : {0}", exn.Message));
-                return PartialView("~/Shared/CustomError.cshtml");
+                ViewBag.Header = "Wallet Transaction Check";
+                ViewBag.Message = "Unable to process wallet transactions. Please check manually!";
+                return PartialView("Partials/_BackgroundCheckFailed");
             }
             return PartialView("Partials/_WalletJournalCheck", entries);
         }
@@ -529,15 +533,17 @@ namespace HoppsWebPlatform_Revamp.Controllers
                         flaggedEveMails.AddRange(GetMailMessageFlagsForCharacter(api));
                     else
                         //API was invalid, like an exception, put it in an eve mail to display
-                        flaggedEveMails.Add(new MailMessage() { Body= " Invalid API for" + api.PilotName, Subject = "Invalid API for" + api.PilotName  });
+                        flaggedEveMails.Add(new MailMessage() { Body = " Invalid API for" + api.PilotName, Subject = "Invalid API for" + api.PilotName });
                 }
-                return PartialView("Partials/_EveMailCheck", flaggedEveMails);       
+                return PartialView("Partials/_EveMailCheck", flaggedEveMails);
             }
             catch (Exception exn)
             {
-                _logger.Error(string.Format("An error occured whilst attempting to retrieve background check email markup. Exception : {0}", exn.Message));     
+                _logger.Error(string.Format("An error occured whilst attempting to retrieve background check email markup. Exception : {0}", exn.Message));
+                ViewBag.Header = "EVE Mail Check";
+                ViewBag.Message = "Unable to process EVE Mails. Please check manually!";
+                return PartialView("Partials/_BackgroundCheckFailed");
             }
-            return PartialView("~/Shared/CustomError.cshtml");
         }
 
         /// <summary>
@@ -547,7 +553,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
         /// <returns>List of any mail message flags</returns>
         public List<MailMessage> GetMailMessageFlagsForCharacter(ApiKey api)
         {
-            List<MailMessage> messages = new List<MailMessage>();  
+            List<MailMessage> messages = new List<MailMessage>();
             List<MailMessage> flaggedMessages = new List<MailMessage>();
 
             messages = APIHelper.EVE_GetMailMessagesForCharacter(api.KeyID, api.VCode, APIHelper.EVE_GetPilotIDByName(api.PilotName)).ToList();
@@ -563,7 +569,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
                         break;
                     }
                 }
-            }                  
+            }
             return flaggedMessages;
         }
 
@@ -577,9 +583,9 @@ namespace HoppsWebPlatform_Revamp.Controllers
         public ActionResult FinalizeBackgroundCheck(int applicationID, string notes, string action)
         {
             RecruitmentApplication application = _recruitmentRepository.GetRecruitApplicationByID(applicationID);
-            
+
             if (application != null && application.Active == true)
-            {                
+            {
                 string actionText = "";
                 switch (action)
                 {
@@ -603,8 +609,8 @@ namespace HoppsWebPlatform_Revamp.Controllers
                 {
                     _logger.Error(string.Format("An error occured whilst attempting to complete the background check for application : {0}. Exception : {1}", applicationID, exn.Message));
                     return View("~/CustomError.cshtml", string.Format("Unable to process the background check for : {0}. Please try again or contact an admin", applicationID));
-                } 
-                
+                }
+
             }
 
             return RedirectToAction("Index");
@@ -618,13 +624,13 @@ namespace HoppsWebPlatform_Revamp.Controllers
         public JsonResult GetConfirmationEVEMail(long appID)
         {
             RecruitmentApplication app = _recruitmentRepository.GetRecruitApplicationByID(appID);
-            Dictionary<string, string> data = new Dictionary<string,string>();
+            Dictionary<string, string> data = new Dictionary<string, string>();
             data.Add("Sender", User.Identity.Name);
             data.Add("Reciever", app.ApplicantName);
-            
+
             string body = EmailHelper.ConvertViewToString(this, "Partials/ConfirmationEVEMail", new ViewDataDictionary() { Model = data });
-            MailMessage message = new MailMessage() { Body = body, Subject = "Application To HOPPS Has Been Approved", ToPilotIdList = new List<long>(){APIHelper.EVE_GetPilotIDByName(app.ApplicantName)} };
-            return Json(message, JsonRequestBehavior.AllowGet);                
+            MailMessage message = new MailMessage() { Body = body, Subject = "Application To HOPPS Has Been Approved", ToPilotIdList = new List<long>() { APIHelper.EVE_GetPilotIDByName(app.ApplicantName) } };
+            return Json(message, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -663,8 +669,8 @@ namespace HoppsWebPlatform_Revamp.Controllers
                 {
                     _logger.Error(string.Format("An error occured whilst attempting to complete recruit application : {0}. Exception : {1}", appID, exn.Message));
                     return View("~/CustomError.cshtml", string.Format("Unable to complete the application : {0}. Please try again or contact an admin", appID));
-                }                
-            }            
+                }
+            }
             return RedirectToAction("Index");
         }
 
@@ -675,68 +681,78 @@ namespace HoppsWebPlatform_Revamp.Controllers
         /// <returns>View for ship fitting section</returns>
         public PartialViewResult GetShipFittingCheck(IEnumerable<ApiKey> apiKeys)
         {
-            //Gets all of the ship fittings to check
-            IEnumerable<RecruitApplicationShipFitting> shipFittings = _recruitmentRepository.GetShipFittingsByActivity(true);
-            bool apiGood = true;
-
-            // The complete list to use for later rendering
-            List<ShipFittingCheckResult> completeFittingResults = new List<ShipFittingCheckResult>();
-
-            //A ship fitting container for errors
-            ShipFittingCheckResult errorResult = new ShipFittingCheckResult();
-
-            foreach (ApiKey key in apiKeys)
+            try
             {
-                long characterID = APIHelper.EVE_GetPilotIDByName(key.PilotName);
+                //Gets all of the ship fittings to check
+                IEnumerable<RecruitApplicationShipFitting> shipFittings = _recruitmentRepository.GetShipFittingsByActivity(true);
+                bool apiGood = true;
 
-                errorResult.PilotName = key.PilotName;
-                try
+                // The complete list to use for later rendering
+                List<ShipFittingCheckResult> completeFittingResults = new List<ShipFittingCheckResult>();
+
+                //A ship fitting container for errors
+                ShipFittingCheckResult errorResult = new ShipFittingCheckResult();
+
+                foreach (ApiKey key in apiKeys)
                 {
-                    //Checks if the API is usable
-                    apiGood = APIHelper.EVE_IsAPIFullConsistantAccount(key.KeyID, key.VCode);
+                    long characterID = APIHelper.EVE_GetPilotIDByName(key.PilotName);
+
+                    errorResult.PilotName = key.PilotName;
+                    try
+                    {
+                        //Checks if the API is usable
+                        apiGood = APIHelper.EVE_IsAPIFullConsistantAccount(key.KeyID, key.VCode);
+                    }
+                    catch (Exception exn)
+                    {
+                        errorResult.ErrorMessage = key.PilotName + " - Unable to retrieve data from the API server";
+                        completeFittingResults.Add(errorResult);
+                        continue;
+                    }
+                    if (!apiGood)
+                    {
+                        errorResult.ErrorMessage = key.PilotName + " - Invalid API for pilot";
+                        completeFittingResults.Add(errorResult);
+                        continue;
+                    }
+
+                    //Gets a list of all the characters skills
+                    Dictionary<int, int> skills = APIHelper.EVE_GetCharactersSkills(key.KeyID, key.VCode, characterID);
+
+                    foreach (RecruitApplicationShipFitting fitting in shipFittings)
+                    {
+
+                        ShipFittingCheckResult fittingResult = new ShipFittingCheckResult();
+                        fittingResult.PilotName = key.PilotName;
+                        fittingResult.ShipFitting = fitting;
+
+                        List<SkillPrerequisite> missingSkills = new List<SkillPrerequisite>();
+
+                        //Gets all the required skills for the fittings ship
+                        IEnumerable<SkillPrerequisite> shipSkills = _eveDbRepository.GetItemsPrimaryRequirements(null, fitting.ShipType);
+                        //Check if the pilot has all the skills required, if not, the missing skills are out'd
+                        bool meetItemPreReqs = DoesPilotHaveAllPrereqs(skills, shipSkills, out missingSkills);
+                        fittingResult.MissingShipSkills = missingSkills;
+
+                        //Gets all the required skills for the fitting modules / hardware
+                        IEnumerable<SkillPrerequisite> moduleSkills = GetFittingPrerequisitesExcludingShipById(fitting.ID);
+                        missingSkills.Clear();
+                        //Check if the pilot has all the skills required, if not, the missing skills are out'd
+                        meetItemPreReqs = DoesPilotHaveAllPrereqs(skills, moduleSkills, out missingSkills);
+                        fittingResult.MissingModuleSkills = missingSkills;
+
+                        completeFittingResults.Add(fittingResult);
+                    }
                 }
-                catch (Exception exn)
-                {
-                    errorResult.ErrorMessage = key.PilotName + " - Unable to retrieve data from the API server";
-                    completeFittingResults.Add(errorResult);
-                    continue;
-                }
-                if (!apiGood)
-                {
-                    errorResult.ErrorMessage = key.PilotName + " - Invalid API for pilot";
-                    completeFittingResults.Add(errorResult);
-                    continue;
-                }
-
-                //Gets a list of all the characters skills
-                Dictionary<int, int> skills = APIHelper.EVE_GetCharactersSkills(key.KeyID, key.VCode, characterID);
-
-                foreach (RecruitApplicationShipFitting fitting in shipFittings)
-                {
-
-                    ShipFittingCheckResult fittingResult = new ShipFittingCheckResult();
-                    fittingResult.PilotName = key.PilotName;
-                    fittingResult.ShipFitting = fitting;
-
-                    List<SkillPrerequisite> missingSkills = new List<SkillPrerequisite>();
-
-                    //Gets all the required skills for the fittings ship
-                    IEnumerable<SkillPrerequisite> shipSkills = _eveDbRepository.GetItemsPrimaryRequirements(null, fitting.ShipType);
-                    //Check if the pilot has all the skills required, if not, the missing skills are out'd
-                    bool meetItemPreReqs = DoesPilotHaveAllPrereqs(skills, shipSkills, out missingSkills);
-                    fittingResult.MissingShipSkills = missingSkills;
-
-                    //Gets all the required skills for the fitting modules / hardware
-                    IEnumerable<SkillPrerequisite> moduleSkills = GetFittingPrerequisitesExcludingShipById(fitting.ID);
-                    missingSkills.Clear();
-                    //Check if the pilot has all the skills required, if not, the missing skills are out'd
-                    meetItemPreReqs = DoesPilotHaveAllPrereqs(skills, moduleSkills, out missingSkills);
-                    fittingResult.MissingModuleSkills = missingSkills;
-
-                    completeFittingResults.Add(fittingResult);
-                }
+                return PartialView("Partials/_ShipFittingMarkup", completeFittingResults);
             }
-            return PartialView("Partials/_ShipFittingMarkup", completeFittingResults);
+            catch (Exception)
+            {
+                ViewBag.Header = "Ship Fitting Check";
+                ViewBag.Message = "Unable to process ship fittings. Please check manually!";
+                return PartialView("Partials/_BackgroundCheckFailed");
+            }
+
         }
 
         /// <summary>
@@ -785,14 +801,14 @@ namespace HoppsWebPlatform_Revamp.Controllers
         /// <param name="fittingID">Id of fitting to get skills for.</param>
         /// <returns>Unique list of skills containing max required level</returns>
         public IEnumerable<SkillPrerequisite> GetFittingPrerequisitesExcludingShipById(int fittingID)
-        {            
+        {
             List<SkillPrerequisite> skills = new List<SkillPrerequisite>();
 
             //Get the XML data for the uploaded fitting and load it.
             string xmlData = _recruitmentRepository.GetShipFittingByID(fittingID).XMLData;
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(xmlData);
-                        
+
             //Hardwares contains all the module elements to get skills for
             XmlNodeList hardwares = doc.GetElementsByTagName("hardware");
 
@@ -816,10 +832,10 @@ namespace HoppsWebPlatform_Revamp.Controllers
                 if (uniqueSkills.Any(x => x.SkillID == skill.SkillID))
                 {
                     SkillPrerequisite tempPre = uniqueSkills.Where(x => x.SkillID == skill.SkillID).First();
-       
+
                     //Check if the current level is less than the new modules required level. 
                     if (tempPre.RequiredLevel < skill.RequiredLevel)
-                        tempPre.RequiredLevel = skill.RequiredLevel;        
+                        tempPre.RequiredLevel = skill.RequiredLevel;
                 }
                 else
                     //Skill is not in the unique list, so er .. add it. =)
@@ -828,7 +844,7 @@ namespace HoppsWebPlatform_Revamp.Controllers
             return uniqueSkills;
         }
 
-    #endregion
+        #endregion
 
     }
 }
