@@ -518,6 +518,7 @@
     <Content Include="Web_ConnectionStrings.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Views\Shared\_NavBarPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
